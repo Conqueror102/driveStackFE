@@ -1,0 +1,10 @@
+allowBuilds:
+  '@google/genai': true
+  '@tailwindcss/oxide': true
+  msw: true
+  protobufjs: true
+  re2: true
+  sharp: true
+  unrs-resolver: true
+minimumReleaseAgeExclude:
+  - zustand@5.0.14

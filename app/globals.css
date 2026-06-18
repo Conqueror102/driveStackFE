@@ -28,33 +28,25 @@
     --color-input: var(--input);
     --color-ring: var(--ring);
 
-    /* App Custom Tokens */
-    --color-surface: var(--surface);
-    --color-surface-raised: var(--surface-raised);
-    --color-border: var(--border);
-    --color-border-strong: var(--border-strong);
+    /* App Custom Tokens (B&W) */
+    --color-ds-pure-black: #000000;
+    --color-ds-off-black: #0A0A0A;
+    --color-ds-dark-surface: #111111;
+    --color-ds-mid-dark: #1C1C1C;
+    --color-ds-true-white: #FFFFFF;
+    --color-ds-off-white: #F7F7F7;
+    --color-ds-light-surface: #F0F0F0;
+    --color-ds-light-border: #E2E2E2;
 
-    --color-text-primary: var(--text-primary);
-    --color-text-secondary: var(--text-secondary);
-    --color-text-tertiary: var(--text-tertiary);
-    --color-text-disabled: var(--text-disabled);
+    --color-ds-dark-text: #0A0A0A;
+    --color-ds-mid-grey: #666666;
+    --color-ds-light-grey: #999999;
+    --color-ds-pale-grey: #CCCCCC;
 
-    --color-accent: var(--accent);
-    --color-accent-hover: var(--accent-hover);
-    --color-accent-subtle: var(--accent-subtle);
-    --color-accent-text: var(--accent-text);
-
-    --color-success: var(--success);
-    --color-success-subtle: var(--success-subtle);
-    --color-success-text: var(--success-text);
-
-    --color-warning: var(--warning);
-    --color-warning-subtle: var(--warning-subtle);
-    --color-warning-text: var(--warning-text);
-
-    --color-danger: var(--danger);
-    --color-danger-subtle: var(--danger-subtle);
-    --color-danger-text: var(--danger-text);
+    --color-text-primary: #0A0A0A;
+    --color-text-secondary: #666666;
+    --color-text-tertiary: #999999;
+    --color-border: #E2E2E2;
 
     /* Sidebar tokens */
     --color-sidebar-bg: var(--sidebar-bg);
@@ -96,34 +88,26 @@
     --ring: #2563EB;
     --radius: 0.625rem;
 
-    /* Custom DriveStack Tokens */
-    --surface: #F5F5F3;
-    --surface-raised: #FFFFFF;
-    --border: #E8E8E5;
-    --border-strong: #D4D4CF;
+    /* Custom DriveStack Tokens (Black & White Editorial) */
+    --ds-pure-black: #000000;
+    --ds-off-black: #0A0A0A;
+    --ds-dark-surface: #111111;
+    --ds-mid-dark: #1C1C1C;
+    --ds-true-white: #FFFFFF;
+    --ds-off-white: #F7F7F7;
+    --ds-light-surface: #F0F0F0;
+    --ds-light-border: #E2E2E2;
 
-    --text-primary: #0F0F0F;
-    --text-secondary: #6B7280;
-    --text-tertiary: #9CA3AF;
-    --text-disabled: #D1D5DB;
+    --ds-dark-text: #0A0A0A;
+    --ds-mid-grey: #666666;
+    --ds-light-grey: #999999;
+    --ds-pale-grey: #CCCCCC;
 
-    /* Accent — vibrant blue */
-    --accent: #2563EB;
-    --accent-hover: #1D4ED8;
-    --accent-subtle: #EFF6FF;
-    --accent-text: #1D4ED8;
-
-    --success: #16A34A;
-    --success-subtle: #F0FDF4;
-    --success-text: #15803D;
-
-    --warning: #D97706;
-    --warning-subtle: #FFFBEB;
-    --warning-text: #B45309;
-
-    --danger: #DC2626;
-    --danger-subtle: #FEF2F2;
-    --danger-text: #B91C1C;
+    /* Semantic mappings */
+    --text-primary: var(--ds-dark-text);
+    --text-secondary: var(--ds-mid-grey);
+    --text-tertiary: var(--ds-light-grey);
+    --border: var(--ds-light-border);
 
     /* Dark sidebar */
     --sidebar-bg: #0F0F12;
@@ -285,6 +269,11 @@
   100% { background-position: 0% 50%; }
 }
 
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 .animate-fade-in-up {
   animation: fade-in-up var(--duration-normal) var(--ease-out-expo) both;
 }
@@ -365,5 +354,5 @@
 
 /* Focus ring style override */
 .focus-ring {
-  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2;
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ds-pure-black focus-visible:ring-offset-2;
 }

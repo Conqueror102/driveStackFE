@@ -5,7 +5,16 @@ import {
 } from '@/lib/server/backend';
 import { NextRequest, NextResponse } from 'next/server';
 
-const ALLOWED_PREFIXES = ['google-accounts', 'storage', 'files'];
+const ALLOWED_PREFIXES = [
+  'google-accounts',
+  'storage',
+  'files',
+  'alerts',
+  'notifications',
+  'activity',
+  'saved-searches',
+  'admin',
+];
 
 function isAllowed(path: string) {
   return ALLOWED_PREFIXES.some((prefix) => path === prefix || path.startsWith(`${prefix}/`));
@@ -37,10 +46,13 @@ async function proxy(request: NextRequest, context: { params: Promise<{ path: st
   });
 
   const responseHeaders = new Headers();
-  const backendContentType = backendResponse.headers.get('content-type');
-  if (backendContentType) responseHeaders.set('Content-Type', backendContentType);
+  for (const header of ['content-type', 'content-length', 'content-disposition', 'cache-control', 'accept-ranges']) {
+    const value = backendResponse.headers.get(header);
+    if (value) responseHeaders.set(header, value);
+  }
+  responseHeaders.set('x-drivestack-proxy-target', `${target.pathname}${target.search}`);
 
-  const response = new NextResponse(await backendResponse.text(), {
+  const response = new NextResponse(await backendResponse.arrayBuffer(), {
     status: backendResponse.status,
     headers: responseHeaders,
   });

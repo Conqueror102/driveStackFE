@@ -22,4 +22,16 @@ export const accountsApi = {
     apiFetch(`/api/backend/google-accounts/${id}/quota`, {
       schema: connectedAccountSchema,
     }),
+
+  setDefault: (id: string) =>
+    apiFetch(`/api/backend/google-accounts/${id}/set-default`, {
+      method: 'PATCH',
+      schema: successSchema,
+    }),
+
+  removeDefault: (id: string) =>
+    apiFetch(`/api/backend/google-accounts/${id}/remove-default`, {
+      method: 'PATCH',
+      schema: successSchema,
+    }),
 };

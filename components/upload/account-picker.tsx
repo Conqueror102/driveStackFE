@@ -1,26 +1,39 @@
 import { cn } from '@/lib/utils';
 import { formatBytes } from '@/lib/utils/bytes';
-import { Check } from 'lucide-react';
+import { Check, Sparkles } from 'lucide-react';
 
 interface AccountPickerProps {
   accounts: any[];
   selectedId: string | null;
   onSelect: (id: string) => void;
+  recommendedId?: string | null;
+  requiredBytes?: number;
 }
 
-export function AccountPicker({ accounts, selectedId, onSelect }: AccountPickerProps) {
+export function AccountPicker({ accounts, selectedId, onSelect, recommendedId, requiredBytes = 0 }: AccountPickerProps) {
   if (accounts.length === 0) {
     return <div className="text-sm text-text-tertiary text-center py-6">No accounts connected.</div>;
   }
 
+  const sortedAccounts = [...accounts].sort((a, b) => {
+    if (a.id === recommendedId) return -1;
+    if (b.id === recommendedId) return 1;
+    return Number(Boolean(b.isDefault)) - Number(Boolean(a.isDefault));
+  });
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-      {accounts.map((acc) => {
+      {sortedAccounts.map((acc) => {
         const isSelected = selectedId === acc.id;
         const freeSpace = BigInt(acc.storageLimit) > BigInt(acc.storageUsed)
           ? BigInt(acc.storageLimit) - BigInt(acc.storageUsed)
           : BigInt(0);
-        const isUsable = acc.status === 'ACTIVE';
+        const fits = requiredBytes === 0 || freeSpace >= BigInt(requiredBytes);
+        const isUsable = acc.status === 'ACTIVE' && fits;
+        const labels = [
+          acc.isDefault ? 'Default' : null,
+          acc.id === recommendedId ? 'Recommended' : null,
+        ].filter(Boolean).join(' · ');
 
         return (
           <button
@@ -50,8 +63,14 @@ export function AccountPicker({ accounts, selectedId, onSelect }: AccountPickerP
                 "text-[12px] transition-colors",
                 isSelected ? "text-accent/70" : "text-text-secondary"
               )}>
-                {isUsable ? `${formatBytes(freeSpace)} free` : acc.status.replaceAll('_', ' ').toLowerCase()}
+                {isUsable ? `${formatBytes(freeSpace)} free` : !fits ? 'Not enough space' : acc.status.replaceAll('_', ' ').toLowerCase()}
               </div>
+              {labels && (
+                <div className="mt-1 inline-flex items-center gap-1 rounded-md bg-text-primary px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">
+                  {acc.id === recommendedId && <Sparkles className="h-2.5 w-2.5" />}
+                  {labels}
+                </div>
+              )}
             </div>
             
             {/* Checkmark icon */}

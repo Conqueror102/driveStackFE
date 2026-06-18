@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { useAccounts, useRefreshQuota, useDisconnectAccount } from '@/hooks/use-accounts';
+import { useAccounts, useRefreshQuota, useDisconnectAccount, useSetDefaultAccount } from '@/hooks/use-accounts';
 import { formatBytes } from '@/lib/utils/bytes';
 import { formatRelative } from '@/lib/utils/dates';
-import { MoreVertical, RefreshCw, ExternalLink, Unplug, Cloud, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { MoreVertical, RefreshCw, ExternalLink, Unplug, Cloud, AlertTriangle, CheckCircle2, Bell, Star } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { ConfirmDialog } from '../common/confirm-dialog';
 import { ConnectAccountButton } from './connect-account-button';
+import { useAlerts, useToggleAlert } from '@/hooks/use-alerts';
 
 export function AccountsList() {
   const { data: accounts, isLoading } = useAccounts();
@@ -42,7 +43,11 @@ export function AccountsList() {
 function AccountCard({ account }: { account: any }) {
   const { mutate: refresh, isPending: isRefreshing } = useRefreshQuota();
   const { mutate: disconnect, isPending: isDisconnecting } = useDisconnectAccount();
+  const setDefault = useSetDefaultAccount();
+  const { data: alerts = [] } = useAlerts();
+  const toggleAlert = useToggleAlert();
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showAlerts, setShowAlerts] = useState(false);
 
   const used = Number(account.storageUsed);
   const limit = Number(account.storageLimit);
@@ -68,6 +73,12 @@ function AccountCard({ account }: { account: any }) {
           style={{ backgroundColor: account.colorInfo.dot }}
         />
 
+        {account.isDefault && (
+          <div className="absolute right-4 top-4 z-20 rounded-md bg-text-primary px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
+            Default
+          </div>
+        )}
+
         <div className="p-6 flex flex-col h-full relative z-10">
           <div className="flex justify-between items-start mb-6">
             <div 
@@ -84,6 +95,12 @@ function AccountCard({ account }: { account: any }) {
               <DropdownMenuContent align="end" className="w-48 rounded-xl shadow-lg border-border p-1">
                 <DropdownMenuItem onClick={() => refresh(account.id)} className="gap-2 text-[13px] rounded-lg cursor-pointer">
                   <RefreshCw className="w-3.5 h-3.5" /> Refresh quota
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setDefault.mutate({ id: account.id, isDefault: Boolean(account.isDefault) })} className="gap-2 text-[13px] rounded-lg cursor-pointer">
+                  <Star className="w-3.5 h-3.5" /> {account.isDefault ? 'Remove default' : 'Set as default'}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setShowAlerts((value) => !value)} className="gap-2 text-[13px] rounded-lg cursor-pointer">
+                  <Bell className="w-3.5 h-3.5" /> Storage alerts
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => window.open('https://drive.google.com', '_blank')} className="gap-2 text-[13px] rounded-lg cursor-pointer">
                   <ExternalLink className="w-3.5 h-3.5" /> Open standard Drive
@@ -115,6 +132,31 @@ function AccountCard({ account }: { account: any }) {
               )}
             </div>
           </div>
+
+          {showAlerts && (
+            <div className="mb-5 rounded-xl border border-border bg-[#101114] p-4 text-white shadow-xl">
+              <div className="mb-3 flex items-center gap-2">
+                <Bell className="h-4 w-4 text-blue-300" />
+                <span className="text-[13px] font-semibold">Storage alerts</span>
+              </div>
+              <div className="space-y-2">
+                {([80, 90] as const).map((threshold) => {
+                  const alert = alerts.find((item) => item.accountId === account.id && item.threshold === threshold);
+                  return (
+                    <label key={threshold} className="flex cursor-pointer items-center justify-between rounded-lg bg-white/5 px-3 py-2 text-[13px]">
+                      <span>{threshold}% full</span>
+                      <input
+                        type="checkbox"
+                        checked={Boolean(alert)}
+                        onChange={(event) => toggleAlert.mutate({ accountId: account.id, threshold, alertId: alert?.id, enabled: event.target.checked })}
+                        className="h-4 w-4 accent-blue-500"
+                      />
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Nested Storage Box */}
           <div className="mt-auto bg-[#F9FAFB] rounded-xl p-4 border border-border/60 group-hover:bg-white group-hover:border-border transition-colors duration-300">

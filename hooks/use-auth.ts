@@ -6,6 +6,7 @@ import { authApi } from '@/lib/api/auth.api';
 import { ApiClientError } from '@/lib/api/client';
 import { QUERY_KEYS } from '@/lib/constants/query-keys';
 import { useAuthStore } from '@/stores/auth.store';
+import { useSubscriptionStore } from '@/stores/subscription.store';
 import type {
   ChangePasswordInput,
   LoginInput,
@@ -15,6 +16,7 @@ import type {
 
 export function useCurrentUser() {
   const setUser = useAuthStore((state) => state.setUser);
+  const setSubscription = useSubscriptionStore((state) => state.setSubscription);
 
   const query = useQuery({
     queryKey: QUERY_KEYS.auth.me(),
@@ -24,9 +26,19 @@ export function useCurrentUser() {
   });
 
   useEffect(() => {
-    if (query.data) setUser(query.data);
+    if (query.data) {
+      setUser(query.data);
+      if (query.data.subscription) {
+        setSubscription({
+          plan: query.data.subscription.plan,
+          status: query.data.subscription.status,
+          currentPeriodEnd: query.data.subscription.currentPeriodEnd,
+          gracePeriodEndsAt: query.data.subscription.gracePeriodEndsAt,
+        });
+      }
+    }
     if (query.error instanceof ApiClientError && query.error.status === 401) setUser(null);
-  }, [query.data, query.error, setUser]);
+  }, [query.data, query.error, setUser, setSubscription]);
 
   return query;
 }
@@ -35,11 +47,20 @@ export function useLogin() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const setUser = useAuthStore((state) => state.setUser);
+  const setSubscription = useSubscriptionStore((state) => state.setSubscription);
 
   return useMutation({
     mutationFn: (data: LoginInput) => authApi.login(data),
     onSuccess: ({ user }) => {
       setUser(user);
+      if (user.subscription) {
+        setSubscription({
+          plan: user.subscription.plan,
+          status: user.subscription.status,
+          currentPeriodEnd: user.subscription.currentPeriodEnd,
+          gracePeriodEndsAt: user.subscription.gracePeriodEndsAt,
+        });
+      }
       queryClient.setQueryData(QUERY_KEYS.auth.me(), user);
       router.push('/overview');
     },
@@ -50,11 +71,20 @@ export function useRegister() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const setUser = useAuthStore((state) => state.setUser);
+  const setSubscription = useSubscriptionStore((state) => state.setSubscription);
 
   return useMutation({
     mutationFn: (data: RegisterInput) => authApi.register(data),
     onSuccess: ({ user }) => {
       setUser(user);
+      if (user.subscription) {
+        setSubscription({
+          plan: user.subscription.plan,
+          status: user.subscription.status,
+          currentPeriodEnd: user.subscription.currentPeriodEnd,
+          gracePeriodEndsAt: user.subscription.gracePeriodEndsAt,
+        });
+      }
       queryClient.setQueryData(QUERY_KEYS.auth.me(), user);
       router.push(user.emailVerified ? '/overview' : '/verify-email');
     },

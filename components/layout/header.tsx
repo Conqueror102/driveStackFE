@@ -1,16 +1,19 @@
 'use client';
 
 import { FC, useState } from 'react';
-import { Search, Upload, Bell, Menu, X } from 'lucide-react';
+import { Search, Upload, Menu, X } from 'lucide-react';
 import { useUploadStore } from '@/stores/upload.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
-import Link from 'next/link';
+import { NotificationBell } from '@/components/notifications/notification-bell';
 
 const PAGE_TITLES: Record<string, { title: string; subtitle?: string }> = {
   '/overview': { title: 'Overview', subtitle: 'Your storage at a glance' },
   '/files': { title: 'Files', subtitle: 'All files across your accounts' },
+  '/duplicates': { title: 'Duplicates', subtitle: 'Review repeated files' },
+  '/trash': { title: 'Trash', subtitle: 'Restore files moved to trash' },
+  '/notifications': { title: 'Notifications', subtitle: 'Recent DriveStack updates' },
   '/accounts': { title: 'Accounts', subtitle: 'Manage connected Google accounts' },
   '/storage': { title: 'Storage', subtitle: 'Quota breakdown' },
   '/settings': { title: 'Settings', subtitle: 'Account security' },
@@ -107,13 +110,9 @@ export const Header: FC<{ onMobileMenuToggle?: () => void; mobileMenuOpen?: bool
           <Upload className="h-4 w-4" />
         </button>
 
-        {/* Notifications placeholder */}
-        <button
-          className="p-2 text-text-tertiary hover:text-text-primary hover:bg-surface rounded-lg transition-colors relative"
-          aria-label="Notifications"
-        >
-          <Bell className="h-4 w-4" />
-        </button>
+        <div className="[&_[aria-label='Notifications']]:text-text-tertiary [&_[aria-label='Notifications']]:hover:bg-surface [&_[aria-label='Notifications']]:hover:text-text-primary [&_[aria-label='Notifications']_.ring-sidebar-bg]:ring-white">
+          <NotificationBell />
+        </div>
 
         {/* User avatar (desktop) */}
         <div className="hidden lg:flex items-center ml-1">

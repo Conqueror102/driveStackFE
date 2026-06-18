@@ -5,9 +5,14 @@ interface FileListProps {
   files: FileRecord[];
   accountColorMap?: Map<string, { bg: string; text: string; dot: string }>;
   onOpenFolder?: (folderId: string) => void;
+  onPreview?: (file: FileRecord) => void;
+  onMove?: (file: FileRecord) => void;
+  selectionMode?: boolean;
+  selectedIds?: Set<string>;
+  onToggleSelected?: (file: FileRecord) => void;
 }
 
-export function FileList({ files, accountColorMap, onOpenFolder }: FileListProps) {
+export function FileList({ files, accountColorMap, onOpenFolder, onPreview, onMove, selectionMode, selectedIds, onToggleSelected }: FileListProps) {
   return (
     <div className="flex flex-col gap-1 pb-20 stagger-children">
       {/* Header */}
@@ -33,6 +38,11 @@ export function FileList({ files, accountColorMap, onOpenFolder }: FileListProps
             isDuplicate={isDuplicate}
             accountColor={color}
             onOpenFolder={onOpenFolder}
+            onPreview={onPreview}
+            onMove={onMove}
+            selectionMode={selectionMode}
+            selected={selectedIds?.has(file.id)}
+            onToggleSelected={onToggleSelected}
           />
         );
       })}

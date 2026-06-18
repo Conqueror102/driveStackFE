@@ -57,3 +57,120 @@ export function useDeleteFile() {
     }
   });
 }
+
+export function useFilePreview(accountId: string, fileId: string, enabled = false) {
+  return useQuery({
+    queryKey: QUERY_KEYS.files.preview(accountId, fileId),
+    queryFn: () => filesApi.preview(accountId, fileId),
+    enabled,
+  });
+}
+
+export function useDuplicates() {
+  return useQuery({
+    queryKey: QUERY_KEYS.files.duplicates(),
+    queryFn: filesApi.duplicates,
+  });
+}
+
+export function useDuplicateCount() {
+  return useQuery({
+    queryKey: QUERY_KEYS.files.duplicateCount(),
+    queryFn: filesApi.duplicateCount,
+    staleTime: 60 * 1000,
+  });
+}
+
+export function useTriggerDuplicateScan() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: filesApi.triggerDuplicateScan,
+    onSuccess: () => {
+      toast.success('Duplicate scan queued');
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.files.duplicates() });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.files.duplicateCount() });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.activity.recent() });
+    },
+    onError: (error: any) => toast.error(error?.message || 'Unable to start scan'),
+  });
+}
+
+export function useBulkDeleteFiles() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: filesApi.bulkDelete,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.files.root() });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.files.trash() });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.storage.summary() });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.files.duplicates() });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notifications.list() });
+    },
+    onError: (error: any) => toast.error(error?.message || 'Bulk delete failed'),
+  });
+}
+
+export function useBulkRestoreFiles() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: filesApi.bulkRestore,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.files.root() });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.files.trash() });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.storage.summary() });
+    },
+  });
+}
+
+export function useTrashFiles() {
+  return useQuery({
+    queryKey: QUERY_KEYS.files.trash(),
+    queryFn: filesApi.trash,
+  });
+}
+
+export function useBulkMoveFiles() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: filesApi.bulkMove,
+    onSuccess: () => {
+      toast.success('Move operations queued');
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.files.moveHistory() });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.activity.recent() });
+    },
+    onError: (error: any) => toast.error(error?.message || 'Bulk move failed'),
+  });
+}
+
+export function useUploadFromUrl() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: filesApi.uploadFromUrl,
+    onSuccess: (_, variables) => {
+      toast.success(`${variables.fileName || 'File'} saved`);
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.files.root() });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.storage.summary() });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.activity.recent() });
+    },
+    onError: (error: any) => toast.error(error?.message || 'Upload from URL failed'),
+  });
+}
+
+export function useMoveFile() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: filesApi.move,
+    onSuccess: (result) => {
+      toast.success('Move queued');
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.files.moveStatus(result.operationId) });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.files.moveHistory() });
+    },
+    onError: (error: any) => toast.error(error?.message || 'Unable to move file'),
+  });
+}

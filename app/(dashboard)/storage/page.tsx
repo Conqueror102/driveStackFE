@@ -2,6 +2,7 @@
 
 import { PageHeader } from '@/components/common/page-header';
 import { StorageOverviewCard, AccountQuotaList, StatsStrip } from '@/components/dashboard/storage-overview-card';
+import { StorageHistoryChart } from '@/components/storage/storage-history-chart';
 
 export default function StoragePage() {
   return (
@@ -9,6 +10,7 @@ export default function StoragePage() {
       <PageHeader title="Storage" subtitle="Quota breakdown across all accounts" />
       <StatsStrip />
       <StorageOverviewCard />
+      <StorageHistoryChart />
       <AccountQuotaList />
     </div>
   );

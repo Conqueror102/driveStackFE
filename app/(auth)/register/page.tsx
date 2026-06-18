@@ -4,15 +4,18 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { registerSchema, RegisterInput } from '@/lib/validations/auth.schema';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
-import { Loader2 } from 'lucide-react';
+import { Loader2, CheckCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useRegister } from '@/hooks/use-auth';
 
 export default function RegisterPage() {
   const registerUser = useRegister();
+  const searchParams = useSearchParams();
+  const refCode = searchParams.get('ref');
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema)
@@ -35,7 +38,10 @@ export default function RegisterPage() {
 
   const onSubmit = async (data: RegisterInput) => {
     try {
-      await registerUser.mutateAsync(data);
+      await registerUser.mutateAsync({
+        ...data,
+        ...(refCode ? { referralCode: refCode } : {}),
+      } as any);
     } catch (error: any) {
       toast.error(error?.message || 'Failed to create account');
     }
@@ -47,6 +53,15 @@ export default function RegisterPage() {
         <h2 className="text-[24px] font-semibold tracking-tight text-text-primary mb-2">Create an account</h2>
         <p className="text-[14px] text-text-secondary">Get started with DriveStack for free.</p>
       </div>
+
+      {refCode && (
+        <div className="flex items-center gap-2 mb-6 px-3 py-2 bg-green-50 border border-green-200 rounded-lg">
+          <CheckCircle className="h-4 w-4 text-green-600 shrink-0" />
+          <p className="text-[12px] text-green-700">
+            You were referred by a DriveStack user. You'll both benefit when you upgrade to Pro.
+          </p>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-1.5">
@@ -158,3 +173,4 @@ export default function RegisterPage() {
     </div>
   );
 }
+

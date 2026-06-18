@@ -8,13 +8,18 @@ import { formatBytes } from '@/lib/utils/bytes';
 import { AnimatePresence, motion } from 'motion/react';
 import { ConnectAccountButton } from '../accounts/connect-account-button';
 import { useUpload } from '@/hooks/use-upload';
+import { useStorageSummary } from '@/hooks/use-storage';
+import { UrlUploadDialog } from './url-upload-dialog';
 
 export function UploadStagingBar() {
   const { stagedFiles, stageFiles, clearStaged, isOpen, setIsOpen } = useUploadStore();
   const { uploadFiles } = useUpload();
   const { data: accounts } = useAccounts();
   const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null);
+  const [urlUploadOpen, setUrlUploadOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const totalSize = stagedFiles.reduce((acc, file) => acc + file.size, 0);
+  const { data: storageRecommendation } = useStorageSummary(totalSize || undefined);
 
   // When opening, reset state
   useEffect(() => {
@@ -22,6 +27,13 @@ export function UploadStagingBar() {
       setSelectedAccountId(null);
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    if (stagedFiles.length === 0 || selectedAccountId) return;
+    const recommended = storageRecommendation?.recommendedAccountId;
+    const defaultAccount = accounts?.find((account) => account.isDefault);
+    setSelectedAccountId(recommended || defaultAccount?.id || accounts?.[0]?.id || null);
+  }, [accounts, selectedAccountId, stagedFiles.length, storageRecommendation?.recommendedAccountId]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -47,10 +59,11 @@ export function UploadStagingBar() {
 
   if (!isOpen) return null;
 
-  const totalSize = stagedFiles.reduce((acc, file) => acc + file.size, 0);
+  const hasFit = storageRecommendation?.accounts?.some((account) => BigInt(account.free) >= BigInt(totalSize)) ?? true;
 
   return (
     <>
+      <UrlUploadDialog open={urlUploadOpen} onOpenChange={setUrlUploadOpen} />
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -71,7 +84,7 @@ export function UploadStagingBar() {
           <div className="px-5 py-4 border-b border-border flex items-center justify-between bg-surface/50">
             <div>
               <h3 className="text-[16px] font-semibold text-text-primary">Upload Files</h3>
-              <p className="text-[13px] text-text-secondary mt-0.5">Select files and choose where to route them</p>
+                  <p className="text-[13px] text-text-secondary mt-0.5">Select files and choose where to route them</p>
             </div>
             <button 
               onClick={handleClose}
@@ -105,7 +118,16 @@ export function UploadStagingBar() {
                 >
                   <Upload className="w-8 h-8 text-text-tertiary mx-auto mb-3" />
                   <p className="text-[14px] font-medium text-text-primary mb-1">Click to browse or drop files here</p>
-                  <p className="text-[13px] text-text-secondary">Support for any file type</p>
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      setUrlUploadOpen(true);
+                    }}
+                    className="mt-2 text-[13px] font-medium text-accent hover:text-accent-hover"
+                  >
+                    Or paste a URL
+                  </button>
                 </div>
               ) : (
                 <div className="bg-surface rounded-xl border border-border overflow-hidden">
@@ -162,7 +184,14 @@ export function UploadStagingBar() {
                       accounts={accounts} 
                       selectedId={selectedAccountId} 
                       onSelect={setSelectedAccountId} 
+                      recommendedId={storageRecommendation?.recommendedAccountId}
+                      requiredBytes={totalSize}
                     />
+                  )}
+                  {!hasFit && (
+                    <div className="mt-3 rounded-lg border border-warning/30 bg-warning-subtle px-3 py-2 text-[12px] text-warning-text">
+                      Not enough space in any account for all staged files. Split the upload or free up storage first.
+                    </div>
                   )}
                 </motion.div>
               )}
@@ -171,6 +200,7 @@ export function UploadStagingBar() {
 
           {/* Footer actions */}
           <div className="px-5 py-4 border-t border-border bg-surface/50 flex justify-end gap-3">
+            <Button variant="ghost" onClick={() => setUrlUploadOpen(true)}>Paste URL</Button>
             <Button variant="ghost" onClick={handleClose}>Cancel</Button>
             <Button 
               onClick={handleUpload} 

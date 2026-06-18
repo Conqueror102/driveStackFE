@@ -12,6 +12,12 @@ export const userSchema = z.object({
   tokenVersion: z.number(),
   createdAt: z.string(),
   updatedAt: z.string(),
+  subscription: z.object({
+    plan: z.enum(['FREE', 'PRO']),
+    status: z.enum(['ACTIVE', 'ON_HOLD', 'CANCELLED', 'EXPIRED']),
+    currentPeriodEnd: z.string().nullable(),
+    gracePeriodEndsAt: z.string().nullable(),
+  }).optional(),
 });
 
 export const loginRequestSchema = z.object({

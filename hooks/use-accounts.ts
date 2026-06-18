@@ -55,3 +55,20 @@ export function useRefreshQuota() {
     },
   });
 }
+
+export function useSetDefaultAccount() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, isDefault }: { id: string; isDefault: boolean }) =>
+      isDefault ? accountsApi.removeDefault(id) : accountsApi.setDefault(id),
+    onSuccess: (_, variables) => {
+      toast.success(variables.isDefault ? 'Default account removed' : 'Default account updated');
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.accounts.list() });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.storage.summary() });
+    },
+    onError: () => {
+      toast.error('Failed to update default account');
+    },
+  });
+}

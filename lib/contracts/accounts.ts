@@ -20,6 +20,7 @@ export const connectedAccountSchema = z.object({
   lastSyncAt: z.string().nullable().optional(),
   lastSyncError: z.string().nullable().optional(),
   reauthRequiredAt: z.string().nullable().optional(),
+  isDefault: z.boolean().optional().default(false),
   createdAt: z.string(),
 });
 

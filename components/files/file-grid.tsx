@@ -10,6 +10,11 @@ interface FileGridProps {
   files: FileRecord[];
   accountColorMap?: Map<string, { bg: string; text: string; dot: string }>;
   onOpenFolder?: (folderId: string) => void;
+  onPreview?: (file: FileRecord) => void;
+  onMove?: (file: FileRecord) => void;
+  selectedIds?: Set<string>;
+  selectionMode?: boolean;
+  onToggleSelected?: (file: FileRecord) => void;
 }
 
 function FilePreview({ file }: { file: FileRecord }) {
@@ -62,7 +67,7 @@ function FilePreview({ file }: { file: FileRecord }) {
   );
 }
 
-export function FileGrid({ files, accountColorMap, onOpenFolder }: FileGridProps) {
+export function FileGrid({ files, accountColorMap, onOpenFolder, onPreview, onMove, selectedIds, selectionMode, onToggleSelected }: FileGridProps) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 pb-20 stagger-children">
       {files.map(file => {
@@ -79,12 +84,22 @@ export function FileGrid({ files, accountColorMap, onOpenFolder }: FileGridProps
                 className="absolute top-2 left-2 w-2 h-2 rounded-full ring-2 ring-white/80"
                 style={{ backgroundColor: color.dot }}
               />
+              <button
+                type="button"
+                onClick={() => onToggleSelected?.(file)}
+                className={`absolute left-2 top-7 flex h-5 w-5 items-center justify-center rounded-md border bg-white transition-all ${selectionMode ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} ${selectedIds?.has(file.id) ? 'border-accent bg-accent text-white' : 'border-border text-transparent'}`}
+                aria-label={`Select ${file.name}`}
+              >
+                <span className="h-2 w-2 rounded-sm bg-current" />
+              </button>
 
               {/* Hover overlay with actions */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
               <div className="absolute top-2 right-2">
                 <FileActionsMenu
                   file={file}
+                  onMove={onMove}
+                  onPreview={onPreview}
                   trigger={
                     <div
                       role="button"
@@ -103,7 +118,7 @@ export function FileGrid({ files, accountColorMap, onOpenFolder }: FileGridProps
             <div className="p-3">
               <button
                 type="button"
-                onClick={() => file.isFolder && onOpenFolder?.(file.driveFileId)}
+                onClick={() => file.isFolder ? onOpenFolder?.(file.driveFileId) : onPreview?.(file)}
                 className="text-[13px] font-medium text-text-primary truncate mb-1.5 max-w-full text-left hover:text-accent"
                 title={file.name}
               >

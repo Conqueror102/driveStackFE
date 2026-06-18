@@ -2,17 +2,33 @@ import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { FileRecord } from '@/types/file.types';
-import { Download, ExternalLink, Trash2 } from 'lucide-react';
+import { Download, ExternalLink, MoveRight, Trash2 } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useDeleteFile } from '@/hooks/use-files';
 import { filesApi } from '@/lib/api/files.api';
 import { QUERY_KEYS } from '@/lib/constants/query-keys';
 import { ConfirmDialog } from '@/components/common/confirm-dialog';
+import { useSubscriptionStore } from '@/stores/subscription.store';
+import { ProBadge } from '@/components/billing/pro-badge';
+import { useUpgradeModal } from '@/components/billing/upgrade-modal-context';
+import { cn } from '@/lib/utils';
 
-export function FileActionsMenu({ file, trigger }: { file: FileRecord; trigger: React.ReactNode }) {
+export function FileActionsMenu({
+  file,
+  trigger,
+  onMove,
+  onPreview,
+}: {
+  file: FileRecord;
+  trigger: React.ReactNode;
+  onMove?: (file: FileRecord) => void;
+  onPreview?: (file: FileRecord) => void;
+}) {
   const queryClient = useQueryClient();
   const { mutate: deleteFile, isPending } = useDeleteFile();
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const canAccess = useSubscriptionStore((state) => state.canAccess);
+  const { openUpgradeModal } = useUpgradeModal();
 
   const openDownload = async () => {
     try {
@@ -43,11 +59,27 @@ export function FileActionsMenu({ file, trigger }: { file: FileRecord; trigger: 
           {trigger}
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
+          <DropdownMenuItem onClick={() => onPreview?.(file)} className="gap-2">
+            <ExternalLink className="w-4 h-4" /> Preview
+          </DropdownMenuItem>
           {file.webViewLink && (
             <DropdownMenuItem onClick={() => window.open(file.webViewLink!, '_blank', 'noopener,noreferrer')} className="gap-2">
               <ExternalLink className="w-4 h-4" /> Open in Drive
             </DropdownMenuItem>
           )}
+          <DropdownMenuItem
+            onClick={() => {
+              if (!canAccess('move_files')) {
+                openUpgradeModal('move_files');
+                return;
+              }
+              onMove?.(file);
+            }}
+            className={cn('gap-2', !canAccess('move_files') && 'opacity-50')}
+          >
+            <MoveRight className="w-4 h-4" /> Move account
+            {!canAccess('move_files') && <ProBadge className="ml-auto" />}
+          </DropdownMenuItem>
           {!file.isFolder && (
             <DropdownMenuItem onClick={openDownload} className="gap-2">
               <Download className="w-4 h-4" /> Download/export
@@ -66,8 +98,8 @@ export function FileActionsMenu({ file, trigger }: { file: FileRecord; trigger: 
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
         title="Delete Drive file"
-        description={`This will permanently delete "${file.name}" from Google Drive. This action cannot be undone from DriveStack.`}
-        confirmText={isPending ? 'Deleting...' : 'Delete file'}
+        description={`This will move "${file.name}" to trash in Google Drive.`}
+        confirmText={isPending ? 'Moving...' : 'Move to trash'}
         destructive
         onConfirm={() => deleteFile({ accountId: file.account.id, fileId: file.driveFileId })}
       />

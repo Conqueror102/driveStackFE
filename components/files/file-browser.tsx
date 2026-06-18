@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
-import { ArrowLeft, ChevronLeft, ChevronRight, Upload } from 'lucide-react';
-import { useFiles } from '@/hooks/use-files';
+import { ArrowLeft, ChevronLeft, ChevronRight, Loader2, Trash2, Upload, X } from 'lucide-react';
+import { useBulkDeleteFiles, useBulkMoveFiles, useBulkRestoreFiles, useFiles } from '@/hooks/use-files';
 import { useAccounts } from '@/hooks/use-accounts';
 import { FileToolbar } from './file-toolbar';
 import { FileList } from './file-list';
@@ -12,6 +12,13 @@ import { PageHeader } from '../common/page-header';
 import { Button } from '@/components/ui/button';
 import { useUploadStore } from '@/stores/upload.store';
 import type { SortValue } from './file-toolbar';
+import type { FileRecord } from '@/types/file.types';
+import { FilePreviewPanel } from './file-preview-panel';
+import { MoveFileSheet } from './move-file-sheet';
+import { toast } from 'sonner';
+import { useSubscriptionStore } from '@/stores/subscription.store';
+import { useUpgradeModal } from '@/components/billing/upgrade-modal-context';
+import { ProBadge } from '@/components/billing/pro-badge';
 
 export function FileBrowser() {
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
@@ -21,8 +28,17 @@ export function FileBrowser() {
   const [sortValue, setSortValue] = useState<SortValue>('modifiedAt:desc');
   const [parentId, setParentId] = useState<string | undefined>();
   const [page, setPage] = useState(1);
+  const [selectedFiles, setSelectedFiles] = useState<FileRecord[]>([]);
+  const [previewFile, setPreviewFile] = useState<FileRecord | null>(null);
+  const [moveFile, setMoveFile] = useState<FileRecord | null>(null);
   const { setIsOpen } = useUploadStore();
+  const bulkDelete = useBulkDeleteFiles();
+  const bulkRestore = useBulkRestoreFiles();
+  const bulkMove = useBulkMoveFiles();
   const [sortBy, sortOrder] = sortValue.split(':') as ['name' | 'size' | 'modifiedAt', 'asc' | 'desc'];
+
+  const canAccess = useSubscriptionStore((state) => state.canAccess);
+  const { openUpgradeModal } = useUpgradeModal();
 
   const { data: accounts } = useAccounts();
   const { data: filesData, isLoading } = useFiles({
@@ -37,6 +53,7 @@ export function FileBrowser() {
   });
 
   const files = filesData?.data || [];
+  const selectedIds = useMemo(() => new Set(selectedFiles.map((file) => file.id)), [selectedFiles]);
   const meta = filesData?.meta;
   const canGoBack = (meta?.page ?? page) > 1;
   const canGoForward = meta ? meta.page < meta.lastPage : false;
@@ -52,6 +69,39 @@ export function FileBrowser() {
   const openFolder = (folderId: string) => {
     setParentId(folderId);
     setPage(1);
+    setSelectedFiles([]);
+  };
+
+  const toggleSelected = (file: FileRecord) => {
+    setSelectedFiles((current) =>
+      current.some((item) => item.id === file.id)
+        ? current.filter((item) => item.id !== file.id)
+        : [...current, file]
+    );
+  };
+
+  const deleteSelected = () => {
+    const filesToDelete = selectedFiles.map((file) => ({ accountId: file.account.id, driveFileId: file.driveFileId }));
+    bulkDelete.mutate({ files: filesToDelete }, {
+      onSuccess: () => {
+        toast.success(`${filesToDelete.length} file${filesToDelete.length === 1 ? '' : 's'} moved to trash`, {
+          action: {
+            label: 'Undo',
+            onClick: () => bulkRestore.mutate({ files: filesToDelete }),
+          },
+        });
+        setSelectedFiles([]);
+      },
+    });
+  };
+
+  const moveSelected = (destinationAccountId: string) => {
+    bulkMove.mutate({
+      destinationAccountId,
+      files: selectedFiles.map((file) => ({ sourceAccountId: file.account.id, driveFileId: file.driveFileId })),
+    }, {
+      onSuccess: () => setSelectedFiles([]),
+    });
   };
 
   return (
@@ -116,11 +166,67 @@ export function FileBrowser() {
         ) : files.length === 0 ? (
           <FileEmptyState />
         ) : viewMode === 'list' ? (
-          <FileList files={files} accountColorMap={accountColorMap} onOpenFolder={openFolder} />
+          <FileList
+            files={files}
+            accountColorMap={accountColorMap}
+            onOpenFolder={openFolder}
+            onPreview={setPreviewFile}
+            onMove={setMoveFile}
+            selectionMode={selectedFiles.length > 0}
+            selectedIds={selectedIds}
+            onToggleSelected={toggleSelected}
+          />
         ) : (
-          <FileGrid files={files} accountColorMap={accountColorMap} onOpenFolder={openFolder} />
+          <FileGrid
+            files={files}
+            accountColorMap={accountColorMap}
+            onOpenFolder={openFolder}
+            onPreview={setPreviewFile}
+            onMove={setMoveFile}
+            selectionMode={selectedFiles.length > 0}
+            selectedIds={selectedIds}
+            onToggleSelected={toggleSelected}
+          />
         )}
       </div>
+
+      {selectedFiles.length > 0 && (
+        <div className="fixed bottom-5 left-1/2 z-[90] flex w-[min(680px,calc(100vw-32px))] -translate-x-1/2 items-center gap-3 rounded-xl border border-[#1f2937] bg-[#101114] px-4 py-3 text-white shadow-2xl">
+          <button className="flex h-6 w-6 items-center justify-center rounded-md bg-white/10" onClick={() => setSelectedFiles([])} aria-label="Cancel selection">
+            <X className="h-3.5 w-3.5" />
+          </button>
+          <div className="min-w-0 flex-1">
+            <p className="text-[13px] font-semibold">{selectedFiles.length} selected</p>
+            <p className="truncate text-[11px] text-zinc-400">Bulk operations use trash and can be undone.</p>
+          </div>
+          {!canAccess('bulk_operations') ? (
+            <Button onClick={() => openUpgradeModal('bulk_operations')} className="bg-white text-black hover:bg-zinc-200">
+              Unlock Bulk Operations <ProBadge className="ml-2" />
+            </Button>
+          ) : (
+            <>
+              <select
+                className="h-8 rounded-lg border border-white/10 bg-white/10 px-2 text-[12px] text-white outline-none"
+                defaultValue=""
+                onChange={(event) => {
+                  if (event.target.value) moveSelected(event.target.value);
+                  event.currentTarget.value = '';
+                }}
+                disabled={bulkMove.isPending}
+              >
+                <option value="" className="text-black">Move to...</option>
+                {(accounts || []).map((account) => (
+                  <option key={account.id} value={account.id} className="text-black">{account.googleEmail}</option>
+                ))}
+              </select>
+              <Button variant="destructive" onClick={deleteSelected} disabled={bulkDelete.isPending}>
+                {bulkDelete.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                Delete
+              </Button>
+            </>
+          )}
+        </div>
+      )}
 
       {meta && meta.lastPage > 1 && (
         <div className="flex items-center justify-between border-t border-border pt-4">
@@ -150,6 +256,11 @@ export function FileBrowser() {
             </Button>
           </div>
         </div>
+      )}
+
+      <FilePreviewPanel file={previewFile} onClose={() => setPreviewFile(null)} onMove={setMoveFile} />
+      {moveFile && (
+        <MoveFileSheet file={moveFile} open={Boolean(moveFile)} onOpenChange={(open) => !open && setMoveFile(null)} />
       )}
     </div>
   );

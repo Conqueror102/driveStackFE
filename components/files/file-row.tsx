@@ -3,7 +3,7 @@ import { getFileTypeInfo } from '@/lib/utils/file-type';
 import { formatBytes } from '@/lib/utils/bytes';
 import { formatRelative } from '@/lib/utils/dates';
 import { Badge } from '@/components/ui/badge';
-import { MoreVertical } from 'lucide-react';
+import { Check, MoreVertical } from 'lucide-react';
 import { FileActionsMenu } from './file-actions-menu';
 import { cn } from '@/lib/utils';
 
@@ -12,9 +12,14 @@ interface FileRowProps {
   isDuplicate: boolean;
   accountColor?: { bg: string; text: string; dot: string };
   onOpenFolder?: (folderId: string) => void;
+  onPreview?: (file: FileRecord) => void;
+  onMove?: (file: FileRecord) => void;
+  selectionMode?: boolean;
+  selected?: boolean;
+  onToggleSelected?: (file: FileRecord) => void;
 }
 
-export function FileRow({ file, isDuplicate, accountColor, onOpenFolder }: FileRowProps) {
+export function FileRow({ file, isDuplicate, accountColor, onOpenFolder, onPreview, onMove, selectionMode, selected, onToggleSelected }: FileRowProps) {
   const info = getFileTypeInfo(file.mimeType);
   const color = accountColor || { bg: '#EEF2FF', text: '#3730A3', dot: '#6366F1' };
 
@@ -25,16 +30,28 @@ export function FileRow({ file, isDuplicate, accountColor, onOpenFolder }: FileR
     >
       {/* Name */}
       <div className="flex items-center min-w-0 gap-3">
+        <button
+          type="button"
+          onClick={() => onToggleSelected?.(file)}
+          className={cn(
+            'flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-all',
+            selectionMode ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
+            selected ? 'border-accent bg-accent text-white' : 'border-border bg-white text-transparent hover:border-accent'
+          )}
+          aria-label={`Select ${file.name}`}
+        >
+          <Check className="h-3.5 w-3.5" />
+        </button>
         <div className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center shrink-0">
           <info.icon className="w-4 h-4" style={{ color: info.color }} />
         </div>
         <div className="min-w-0">
           <button
             type="button"
-            onClick={() => file.isFolder && onOpenFolder?.(file.driveFileId)}
+            onClick={() => file.isFolder ? onOpenFolder?.(file.driveFileId) : onPreview?.(file)}
             className={cn(
               'text-[13px] font-medium text-text-primary truncate block text-left max-w-full',
-              file.isFolder && 'hover:text-accent'
+              'hover:text-accent'
             )}
           >
             {file.name}
@@ -67,6 +84,8 @@ export function FileRow({ file, isDuplicate, accountColor, onOpenFolder }: FileR
       <div className="flex justify-end">
         <FileActionsMenu
           file={file}
+          onMove={onMove}
+          onPreview={onPreview}
           trigger={
             <div
               role="button"

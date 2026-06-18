@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Files, Upload, Users, Settings } from 'lucide-react';
+import { Bell, Copy, Files, HardDrive, LayoutDashboard, Trash2, Upload } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUploadStore } from '@/stores/upload.store';
 
@@ -13,8 +13,10 @@ export function MobileNav() {
   const items = [
     { name: 'Overview', href: '/overview', icon: LayoutDashboard },
     { name: 'Files', href: '/files', icon: Files },
-    { name: 'Accounts', href: '/accounts', icon: Users },
-    { name: 'Settings', href: '/settings', icon: Settings },
+    { name: 'Duplicates', href: '/duplicates', icon: Copy },
+    { name: 'Storage', href: '/storage', icon: HardDrive },
+    { name: 'Trash', href: '/trash', icon: Trash2 },
+    { name: 'Alerts', href: '/notifications', icon: Bell },
   ];
 
   return (

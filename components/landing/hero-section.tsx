@@ -3,9 +3,9 @@
 import { useInView, motion, AnimatePresence } from "motion/react";
 import { useRef, useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { AggregatorWidget, DuplicateScannerWidget, BulkCommanderWidget } from "./hero-widgets";
+import { AggregatorWidget, DuplicateScannerWidget, BulkCommanderWidget, FileBrowserWidget } from "./hero-widgets";
 
-const WIDGETS = [AggregatorWidget, DuplicateScannerWidget, BulkCommanderWidget];
+const WIDGETS = [AggregatorWidget, DuplicateScannerWidget, BulkCommanderWidget, FileBrowserWidget];
 
 export function HeroSection() {
   const ref = useRef(null);
@@ -79,7 +79,7 @@ export function HeroSection() {
             
             {/* The UI Widget Container */}
             {/* The UI Widget Container Carousel */}
-            <div className="w-full max-w-[520px] h-[480px] lg:h-[420px] relative perspective-1000">
+            <div className="w-full max-w-[520px] h-[520px] lg:h-[480px] relative perspective-1000">
               <AnimatePresence mode="wait">
                 {WIDGETS.map((Widget, i) => (
                   i === activeIndex && (
@@ -107,7 +107,7 @@ export function HeroSection() {
             >
               <div className="w-2 h-2 rounded-full bg-white animate-pulse" />
               <span className="font-mono text-[11px] text-white/60 uppercase tracking-wider">
-                {activeIndex === 0 ? "Live Syncing" : activeIndex === 1 ? "Auto Scanning" : "Action Ready"}
+                {activeIndex === 0 ? "Live Syncing" : activeIndex === 1 ? "Auto Scanning" : activeIndex === 2 ? "Action Ready" : "File Explorer"}
               </span>
             </motion.div>
           </div>

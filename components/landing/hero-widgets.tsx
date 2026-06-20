@@ -1,7 +1,7 @@
 
 
 import { motion } from "motion/react";
-import { Cloud, HardDrive, Server, Copy, CheckCircle2, Search, Zap, Trash2, ArrowRight } from "lucide-react";
+import { Cloud, HardDrive, Server, Copy, CheckCircle2, Search, Zap, Trash2, ArrowRight, Folder, File as FileIcon, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function AggregatorWidget({ isInView }: { isInView: boolean }) {
@@ -218,6 +218,70 @@ export function BulkCommanderWidget({ isInView }: { isInView: boolean }) {
           >
             <Trash2 className="w-3.5 h-3.5 text-red-400" /> Delete
           </motion.button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function FileBrowserWidget({ isInView }: { isInView: boolean }) {
+  return (
+    <div className="w-full h-full bg-[#050505] border border-white/[0.08] rounded-[24px] overflow-hidden flex flex-col">
+      <div className="px-6 py-4 border-b border-white/[0.05] bg-white/[0.02] flex items-center justify-between">
+        <div className="flex gap-2">
+          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]" />
+          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]" />
+          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]" />
+        </div>
+        <div className="text-[10px] uppercase tracking-widest font-mono text-purple-500/80 flex items-center gap-1.5">
+          <Folder className="w-3 h-3" /> File_Explorer
+        </div>
+      </div>
+
+      <div className="flex-1 p-6 flex flex-col gap-4 relative">
+        <div className="absolute top-1/2 left-0 w-[200px] h-[200px] bg-purple-500/[0.02] blur-[70px] rounded-full pointer-events-none" />
+
+        {/* Breadcrumbs */}
+        <div className="flex items-center gap-2 text-[12px] font-mono text-white/40 bg-white/[0.02] px-3 py-2 rounded-lg border border-white/[0.03]">
+          <span className="text-white/80">Unified_Core</span>
+          <ChevronRight className="w-3 h-3" />
+          <span>Work_Drive</span>
+          <ChevronRight className="w-3 h-3" />
+          <span className="text-purple-400">Marketing_Assets</span>
+        </div>
+
+        {/* File Grid */}
+        <div className="grid grid-cols-2 gap-3 relative z-10 mt-2">
+          {[
+            { name: "Brand_Guidelines.pdf", type: "file", size: "4.2 MB" },
+            { name: "Campaign_Q3", type: "folder", size: "12 Items" },
+            { name: "Logo_Pack.zip", type: "file", size: "28.5 MB" },
+            { name: "Social_Banners", type: "folder", size: "45 Items" },
+            { name: "Pitch_Deck_v2.key", type: "file", size: "15.1 MB" },
+            { name: "Video_Drafts", type: "folder", size: "3 Items" },
+          ].map((item, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={isInView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.3, delay: 0.2 + (i * 0.05) }}
+              className="flex flex-col gap-2 p-3 rounded-xl border border-white/[0.03] bg-white/[0.01] hover:bg-white/[0.03] transition-colors cursor-pointer group"
+            >
+              <div className="flex items-start justify-between">
+                <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center", item.type === 'folder' ? 'bg-purple-500/10' : 'bg-white/5')}>
+                  {item.type === 'folder' ? (
+                    <Folder className="w-4 h-4 text-purple-400" />
+                  ) : (
+                    <FileIcon className="w-4 h-4 text-white/60" />
+                  )}
+                </div>
+              </div>
+              <div className="flex flex-col mt-1">
+                <span className="text-[13px] text-white/90 font-medium truncate group-hover:text-purple-300 transition-colors">{item.name}</span>
+                <span className="text-[11px] text-white/40 font-mono mt-0.5">{item.size}</span>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </div>

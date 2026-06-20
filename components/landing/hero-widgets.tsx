@@ -1,3 +1,5 @@
+
+
 import { motion } from "motion/react";
 import { Cloud, HardDrive, Server, Copy, CheckCircle2, Search, Zap, Trash2, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -8,9 +10,9 @@ export function AggregatorWidget({ isInView }: { isInView: boolean }) {
       {/* Header */}
       <div className="px-6 py-4 border-b border-white/[0.05] bg-white/[0.02] flex items-center justify-between">
         <div className="flex gap-2">
-          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]"/>
-          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]"/>
-          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]"/>
+          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]" />
+          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]" />
+          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]" />
         </div>
         <div className="text-[10px] uppercase tracking-widest font-mono text-white/30">
           Unified_Core
@@ -34,7 +36,7 @@ export function AggregatorWidget({ isInView }: { isInView: boolean }) {
           </div>
 
           <div className="w-full h-3 bg-white/[0.05] rounded-full overflow-hidden flex relative mt-2">
-            <motion.div 
+            <motion.div
               initial={{ width: 0 }}
               animate={isInView ? { width: "74%" } : {}}
               transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
@@ -50,13 +52,13 @@ export function AggregatorWidget({ isInView }: { isInView: boolean }) {
         {/* Connected Drives */}
         <div className="flex flex-col gap-3 relative z-10">
           <span className="text-[11px] text-white/40 font-mono uppercase tracking-wider mb-2">Connected Origins</span>
-          
+
           {[
             { label: "personal@gmail.com", used: "12.5 GB", icon: Cloud },
             { label: "work@company.com", used: "85.0 GB", icon: Server },
             { label: "client-shared@gmail.com", used: "67.7 GB", icon: HardDrive }
           ].map((drive, i) => (
-            <motion.div 
+            <motion.div
               key={i}
               initial={{ opacity: 0, x: 20 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -85,9 +87,9 @@ export function DuplicateScannerWidget({ isInView }: { isInView: boolean }) {
     <div className="w-full h-full bg-[#050505] border border-white/[0.08] rounded-[24px] overflow-hidden flex flex-col">
       <div className="px-6 py-4 border-b border-white/[0.05] bg-white/[0.02] flex items-center justify-between">
         <div className="flex gap-2">
-          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]"/>
-          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]"/>
-          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]"/>
+          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]" />
+          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]" />
+          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]" />
         </div>
         <div className="text-[10px] uppercase tracking-widest font-mono text-amber-500/80 flex items-center gap-1.5">
           <Search className="w-3 h-3" /> Duplicate_Scanner
@@ -111,7 +113,7 @@ export function DuplicateScannerWidget({ isInView }: { isInView: boolean }) {
             { name: "2023_Archive.zip", size: "1.8 GB", locations: ["work", "client-shared"] },
             { name: "Raw_Footage_01.mov", size: "8.5 GB", locations: ["personal", "client-shared"] }
           ].map((file, i) => (
-            <motion.div 
+            <motion.div
               key={i}
               initial={{ opacity: 0, y: 10 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -136,7 +138,7 @@ export function DuplicateScannerWidget({ isInView }: { isInView: boolean }) {
           ))}
         </div>
 
-        <motion.button 
+        <motion.button
           initial={{ opacity: 0, scale: 0.95 }}
           animate={isInView ? { opacity: 1, scale: 1 } : {}}
           transition={{ delay: 0.8 }}
@@ -154,9 +156,9 @@ export function BulkCommanderWidget({ isInView }: { isInView: boolean }) {
     <div className="w-full h-full bg-[#050505] border border-white/[0.08] rounded-[24px] overflow-hidden flex flex-col">
       <div className="px-6 py-4 border-b border-white/[0.05] bg-white/[0.02] flex items-center justify-between">
         <div className="flex gap-2">
-          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]"/>
-          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]"/>
-          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]"/>
+          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]" />
+          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]" />
+          <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]" />
         </div>
         <div className="text-[10px] uppercase tracking-widest font-mono text-blue-500/80 flex items-center gap-1.5">
           <CheckCircle2 className="w-3 h-3" /> Bulk_Commander
@@ -183,7 +185,7 @@ export function BulkCommanderWidget({ isInView }: { isInView: boolean }) {
             { name: "Design_System_v4.fig", type: "Figma", drive: "client-shared" },
             { name: "Marketing_Drafts", type: "Folder", drive: "personal" },
           ].map((file, i) => (
-            <motion.div 
+            <motion.div
               key={i}
               initial={{ opacity: 0, x: -10 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -200,7 +202,7 @@ export function BulkCommanderWidget({ isInView }: { isInView: boolean }) {
         </div>
 
         <div className="mt-auto flex gap-3 relative z-10">
-          <motion.button 
+          <motion.button
             initial={{ opacity: 0, y: 10 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.6 }}
@@ -208,7 +210,7 @@ export function BulkCommanderWidget({ isInView }: { isInView: boolean }) {
           >
             Move <ArrowRight className="w-3.5 h-3.5" />
           </motion.button>
-          <motion.button 
+          <motion.button
             initial={{ opacity: 0, y: 10 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.7 }}

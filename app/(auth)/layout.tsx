@@ -25,7 +25,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       <div className="hidden lg:flex flex-col flex-1 relative overflow-hidden bg-[#0F0F12] text-white">
         {/* Animated gradient mesh background */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-violet-600/20 to-transparent animate-gradient-shift" />
-        
+
         <div className="relative z-10 flex flex-col h-full p-12">
           {/* Logo */}
           <div className="flex items-center gap-3 mb-16">
@@ -39,7 +39,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             <h1 className="text-[40px] leading-[1.1] font-semibold tracking-tight max-w-[480px]">
               Unify your Google Drive storage.
             </h1>
-            
+
             <div className="space-y-4 text-zinc-300">
               {[
                 "Connect unlimited accounts in one view",

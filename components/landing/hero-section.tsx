@@ -1,13 +1,24 @@
 "use client";
 
-import { useInView, motion } from "motion/react";
-import { useRef } from "react";
+import { useInView, motion, AnimatePresence } from "motion/react";
+import { useRef, useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { HardDrive, Cloud, Server } from "lucide-react";
+import { AggregatorWidget, DuplicateScannerWidget, BulkCommanderWidget } from "./hero-widgets";
 
 export function HeroSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [activeIndex, setActiveIndex] = useState(0);
+  
+  const WIDGETS = [AggregatorWidget, DuplicateScannerWidget, BulkCommanderWidget];
+
+  useEffect(() => {
+    if (!isInView) return;
+    const timer = setInterval(() => {
+      setActiveIndex(prev => (prev + 1) % WIDGETS.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [isInView]);
 
   return (
     <section 
@@ -67,82 +78,24 @@ export function HeroSection() {
           <div className={cn("reveal-scale flex justify-center lg:justify-end items-center relative", isInView && "is-visible")} style={{ transitionDelay: "300ms" }}>
             
             {/* The UI Widget Container */}
-            <div className="w-full max-w-[520px] bg-[#050505] border border-white/[0.08] rounded-[24px] shadow-[0_20px_80px_rgba(0,0,0,0.8)] overflow-hidden relative">
-              
-              {/* Header */}
-              <div className="px-6 py-4 border-b border-white/[0.05] bg-white/[0.02] flex items-center justify-between">
-                <div className="flex gap-2">
-                  <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]"/>
-                  <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]"/>
-                  <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]"/>
-                </div>
-                <div className="text-[10px] uppercase tracking-widest font-mono text-white/30">
-                  Unified_Core
-                </div>
-              </div>
-
-              {/* Body */}
-              <div className="p-8 flex flex-col gap-8 relative">
-                {/* Decorative glow */}
-                <div className="absolute -top-10 -right-10 w-[200px] h-[200px] bg-white/[0.02] blur-[60px] rounded-full pointer-events-none" />
-
-                {/* Total Quota Section */}
-                <div className="flex flex-col gap-4 relative z-10">
-                  <div className="flex justify-between items-end">
-                    <div className="flex flex-col">
-                      <span className="text-[12px] text-white/40 font-mono uppercase tracking-wider mb-1">Aggregated Storage</span>
-                      <span className="text-[36px] font-bold text-white tracking-tight leading-none">165.2 <span className="text-[18px] text-white/40">GB</span></span>
-                    </div>
-                    <div className="text-[13px] font-mono text-white/50 bg-white/[0.05] px-3 py-1 rounded-full border border-white/[0.05]">
-                      74% USED
-                    </div>
-                  </div>
-
-                  {/* Progress Bar */}
-                  <div className="w-full h-3 bg-white/[0.05] rounded-full overflow-hidden flex relative mt-2">
-                    <motion.div 
-                      initial={{ width: 0 }}
-                      animate={isInView ? { width: "74%" } : {}}
-                      transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}
-                      className="h-full bg-white/[0.9] rounded-full relative"
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/20" />
-                    </motion.div>
-                  </div>
-                </div>
-
-                <div className="h-[1px] w-full bg-white/[0.05]" />
-
-                {/* Connected Drives */}
-                <div className="flex flex-col gap-3 relative z-10">
-                  <span className="text-[11px] text-white/40 font-mono uppercase tracking-wider mb-2">Connected Origins</span>
-                  
-                  {[
-                    { label: "personal@gmail.com", used: "12.5 GB", icon: Cloud },
-                    { label: "work@company.com", used: "85.0 GB", icon: Server },
-                    { label: "client-shared@gmail.com", used: "67.7 GB", icon: HardDrive }
-                  ].map((drive, i) => (
-                    <motion.div 
+            {/* The UI Widget Container Carousel */}
+            <div className="w-full max-w-[520px] h-[480px] lg:h-[420px] relative perspective-1000">
+              <AnimatePresence mode="wait">
+                {WIDGETS.map((Widget, i) => (
+                  i === activeIndex && (
+                    <motion.div
                       key={i}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={isInView ? { opacity: 1, x: 0 } : {}}
-                      transition={{ duration: 0.5, delay: 0.8 + (i * 0.15) }}
-                      className="flex items-center justify-between p-3.5 rounded-[12px] border border-white/[0.03] bg-white/[0.01] hover:bg-white/[0.03] transition-colors"
+                      initial={{ opacity: 0, rotateX: 10, y: 20 }}
+                      animate={{ opacity: 1, rotateX: 0, y: 0 }}
+                      exit={{ opacity: 0, rotateX: -10, y: -20 }}
+                      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                      className="absolute inset-0 shadow-[0_20px_80px_rgba(0,0,0,0.8)] rounded-[24px]"
                     >
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-white/[0.05] flex items-center justify-center">
-                          <drive.icon className="w-4 h-4 text-white/60" />
-                        </div>
-                        <span className="font-mono text-[13px] md:text-[14px] text-white/70">{drive.label}</span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className="font-mono text-[13px] md:text-[14px] font-medium text-white">{drive.used}</span>
-                      </div>
+                      <Widget isInView={isInView} />
                     </motion.div>
-                  ))}
-                </div>
-
-              </div>
+                  )
+                ))}
+              </AnimatePresence>
             </div>
 
             {/* Floating label */}
@@ -153,7 +106,9 @@ export function HeroSection() {
               className="absolute -left-6 bottom-12 bg-[#0A0A0A] border border-white/[0.1] px-4 py-2 rounded-full shadow-xl flex items-center gap-2"
             >
               <div className="w-2 h-2 rounded-full bg-white animate-pulse" />
-              <span className="font-mono text-[11px] text-white/60 uppercase tracking-wider">Live Syncing</span>
+              <span className="font-mono text-[11px] text-white/60 uppercase tracking-wider">
+                {activeIndex === 0 ? "Live Syncing" : activeIndex === 1 ? "Auto Scanning" : "Action Ready"}
+              </span>
             </motion.div>
           </div>
           

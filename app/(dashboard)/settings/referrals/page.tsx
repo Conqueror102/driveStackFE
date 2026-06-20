@@ -25,7 +25,7 @@ export default function ReferralsPage() {
           <h2 className="text-[15px] font-semibold text-text-primary">Your Referrals</h2>
           <p className="text-[13px] text-text-secondary mt-1">Track the status of your invites</p>
         </div>
-        <ReferralStatsTable stats={data} isLoading={isLoading} />
+        <ReferralStatsTable referrals={data?.referrals || []} isLoading={isLoading} />
       </div>
     </div>
   );

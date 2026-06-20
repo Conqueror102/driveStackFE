@@ -18,7 +18,7 @@ export default function ReferralsPage() {
     <div className="space-y-6 animate-fade-in-up">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ReferralCard />
-        <BonusSlotsDisplay stats={data} isLoading={isLoading} />
+        <BonusSlotsDisplay bonusSlots={data?.bonusSlots || 0} />
       </div>
       <div className="bg-white border border-border rounded-xl overflow-hidden">
         <div className="px-6 py-5 border-b border-border">

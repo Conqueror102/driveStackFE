@@ -5,12 +5,12 @@ import { useRef, useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { AggregatorWidget, DuplicateScannerWidget, BulkCommanderWidget } from "./hero-widgets";
 
+const WIDGETS = [AggregatorWidget, DuplicateScannerWidget, BulkCommanderWidget];
+
 export function HeroSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [activeIndex, setActiveIndex] = useState(0);
-  
-  const WIDGETS = [AggregatorWidget, DuplicateScannerWidget, BulkCommanderWidget];
 
   useEffect(() => {
     if (!isInView) return;

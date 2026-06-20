@@ -7,6 +7,7 @@ import { paymentsApi } from "@/lib/api/payments.api";
 import { useAuthStore } from "@/stores/auth.store";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { usePricing } from "@/hooks/use-pricing";
 
 export function PricingSection() {
   const [isAnnual, setIsAnnual] = useState(true);
@@ -14,6 +15,20 @@ export function PricingSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const user = useAuthStore((state) => state.user);
+  const { data: pricing, isLoading: isPricingLoading } = usePricing();
+
+  const isNg = (user as any)?.country === 'NG';
+  const currency = isNg ? 'NGN' : 'USD';
+  const activePlan = pricing?.plans?.find(p => p.currency === currency) || { amount: isNg ? 1500 : 2, currency };
+
+  const formatter = new Intl.NumberFormat(isNg ? 'en-NG' : 'en-US', {
+    style: 'currency',
+    currency: currency,
+    minimumFractionDigits: isNg ? 0 : 2,
+  });
+
+  const monthlyPrice = formatter.format(activePlan.amount);
+  const annualMonthlyPrice = formatter.format(Math.round(activePlan.amount * 0.67));
 
   const handleUpgrade = async () => {
     setCheckoutLoading(true);
@@ -141,17 +156,29 @@ export function PricingSection() {
                     style={{ transform: `translateY(${isAnnual ? '-50px' : '0'})` }}
                   >
                     <div className="h-[50px] flex items-end">
-                      <span className="text-[32px] font-bold text-ds-dark-text leading-none">₦1,500</span>
-                      <span className="text-[16px] font-normal text-ds-mid-grey ml-2 pb-1">/ month</span>
+                      {isPricingLoading ? (
+                        <div className="h-8 w-24 bg-ds-light-border animate-pulse rounded"></div>
+                      ) : (
+                        <>
+                          <span className="text-[32px] font-bold text-ds-dark-text leading-none">{monthlyPrice}</span>
+                          <span className="text-[16px] font-normal text-ds-mid-grey ml-2 pb-1">/ month</span>
+                        </>
+                      )}
                     </div>
                     <div className="h-[50px] flex items-end">
-                      <span className="text-[32px] font-bold text-ds-dark-text leading-none">₦1,000</span>
-                      <span className="text-[16px] font-normal text-ds-mid-grey ml-2 pb-1">/ month</span>
+                      {isPricingLoading ? (
+                        <div className="h-8 w-24 bg-ds-light-border animate-pulse rounded"></div>
+                      ) : (
+                        <>
+                          <span className="text-[32px] font-bold text-ds-dark-text leading-none">{annualMonthlyPrice}</span>
+                          <span className="text-[16px] font-normal text-ds-mid-grey ml-2 pb-1">/ month</span>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
                 <div className="text-[14px] text-ds-mid-grey mt-2 h-5">
-                  $2.99 / month for others
+                  {isPricingLoading ? null : isNg ? "$2.00 / month for others" : "₦1,500 / month for others"}
                 </div>
               </div>
               

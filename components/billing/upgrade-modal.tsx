@@ -9,6 +9,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
 import type { ProFeature } from '@/stores/subscription.store';
+import { usePricing } from '@/hooks/use-pricing';
 
 const FEATURE_TITLES: Record<ProFeature, string> = {
   move_files: 'Unlock Move Files',
@@ -36,6 +37,19 @@ export function UpgradeModal() {
   const { isOpen, feature, closeUpgradeModal } = useUpgradeModal();
   const [loading, setLoading] = useState(false);
   const user = useAuthStore((state) => state.user);
+  const { data: pricing, isLoading: isPricingLoading } = usePricing();
+
+  const isNg = (user as any)?.country === 'NG';
+  const currency = isNg ? 'NGN' : 'USD';
+  const activePlan = pricing?.plans?.find(p => p.currency === currency) || { amount: isNg ? 1500 : 2, currency };
+
+  const formatter = new Intl.NumberFormat(isNg ? 'en-NG' : 'en-US', {
+    style: 'currency',
+    currency: currency,
+    minimumFractionDigits: isNg ? 0 : 2,
+  });
+
+  const formattedPrice = formatter.format(activePlan.amount);
 
   const handleUpgrade = async () => {
     setLoading(true);
@@ -84,7 +98,13 @@ export function UpgradeModal() {
             </ul>
           </div>
 
-          <p className="text-[13px] text-text-secondary">₦800/month · Cancel anytime</p>
+          <p className="text-[13px] text-text-secondary">
+            {isPricingLoading ? (
+               <span className="inline-block h-4 w-16 bg-border animate-pulse rounded"></span>
+            ) : (
+               `${formattedPrice}/month`
+            )} · Cancel anytime
+          </p>
 
           <div className="space-y-2">
             <Button

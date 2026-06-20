@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2, ShieldCheck } from 'lucide-react';
 import { toast } from 'sonner';
-import { PageHeader } from '@/components/common/page-header';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { changePasswordSchema } from '@/lib/validations/auth.schema';
@@ -27,10 +26,8 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <PageHeader title="Settings" subtitle="Account security and session controls" />
-
-      <section className="mt-6 bg-white border border-border rounded-xl p-6">
+    <div className="animate-fade-in-up">
+      <section className="bg-white border border-border rounded-xl p-6">
         <div className="flex items-start gap-3 mb-6">
           <div className="w-9 h-9 rounded-lg bg-accent-subtle text-accent flex items-center justify-center">
             <ShieldCheck className="w-4 h-4" />

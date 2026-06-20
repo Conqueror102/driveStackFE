@@ -4,6 +4,18 @@ export interface CheckoutDto {
   currency: string;
 }
 
+export interface PricingPlan {
+  key: string;
+  amount: number;
+  currency: string;
+  interval: string;
+  isActive: boolean;
+}
+
+export interface PricingResponse {
+  plans: PricingPlan[];
+}
+
 export interface SubscriptionStatusResponse {
   plan: 'FREE' | 'PRO';
   status: 'ACTIVE' | 'ON_HOLD' | 'CANCELLED' | 'EXPIRED';
@@ -30,6 +42,11 @@ export const paymentsApi = {
 
   getStatus: () =>
     apiFetch<SubscriptionStatusResponse>('/api/payments/status', {
+      method: 'GET',
+    }),
+
+  getPricing: () =>
+    apiFetch<PricingResponse>('/api/payments/pricing', {
       method: 'GET',
     }),
 };

@@ -13,7 +13,7 @@ interface ReferralStatsTableProps {
   isLoading: boolean;
 }
 
-export function ReferralStatsTable({ referrals, isLoading }: ReferralStatsTableProps) {
+export function ReferralStatsTable({ referrals = [], isLoading }: ReferralStatsTableProps) {
   return (
     <div className="bg-white border border-border rounded-xl overflow-hidden">
       <div className="px-6 py-4 border-b border-border">

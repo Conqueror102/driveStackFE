@@ -17,10 +17,10 @@ interface ConnectAccountButtonProps {
 export function ConnectAccountButton({ className, variant = "default", size = "default" }: ConnectAccountButtonProps) {
   const { mutate: connect, isPending } = useConnectAccount();
   const { data: accounts } = useAccounts();
-  const isPro = useSubscriptionStore((state) => state.isPro);
+  const isPro = useSubscriptionStore((state) => state.isPro());
   const { openUpgradeModal } = useUpgradeModal();
 
-  const isAtLimit = !isPro() && (accounts?.length ?? 0) >= FREE_ACCOUNT_LIMIT;
+  const isAtLimit = !isPro && (accounts?.length ?? 0) >= FREE_ACCOUNT_LIMIT;
 
   if (isAtLimit) {
     return (

@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { PageHeader } from '@/components/common/page-header';
 import { BillingStatusCard } from '@/components/billing/billing-status-card';
 import { CancelSubscriptionDialog } from '@/components/billing/cancel-subscription-dialog';
+import { FeatureComparison } from '@/components/billing/feature-comparison';
 import { useSubscriptionStore } from '@/stores/subscription.store';
 import { Button } from '@/components/ui/button';
 import { paymentsApi } from '@/lib/api/payments.api';
@@ -34,10 +34,8 @@ export default function BillingPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <PageHeader title="Billing" subtitle="Manage your subscription and payment method" />
-
-      <div className="mt-6 space-y-6">
+    <div className="animate-fade-in-up">
+      <div className="space-y-6">
         {/* ON_HOLD Banner */}
         {status === 'ON_HOLD' && (
           <div className="border border-[#D97706] bg-[#FFFBEB] rounded-xl p-5">
@@ -75,6 +73,14 @@ export default function BillingPage() {
         )}
 
         <BillingStatusCard />
+
+        <div className="bg-white border border-border rounded-xl overflow-hidden">
+          <div className="px-6 py-5 border-b border-border">
+            <h2 className="text-[15px] font-semibold text-text-primary">Plan Features</h2>
+            <p className="text-[13px] text-text-secondary mt-1">Everything included in your current plan</p>
+          </div>
+          <FeatureComparison />
+        </div>
 
         {/* Danger zone — cancel subscription */}
         {plan === 'PRO' && status === 'ACTIVE' && (

@@ -27,7 +27,7 @@ export function FileActionsMenu({
   const queryClient = useQueryClient();
   const { mutate: deleteFile, isPending } = useDeleteFile();
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const canAccess = useSubscriptionStore((state) => state.canAccess);
+  const canAccessMoveFiles = useSubscriptionStore((state) => state.canAccess('move_files'));
   const { openUpgradeModal } = useUpgradeModal();
 
   const openDownload = async () => {
@@ -69,16 +69,16 @@ export function FileActionsMenu({
           )}
           <DropdownMenuItem
             onClick={() => {
-              if (!canAccess('move_files')) {
+              if (!canAccessMoveFiles) {
                 openUpgradeModal('move_files');
                 return;
               }
               onMove?.(file);
             }}
-            className={cn('gap-2', !canAccess('move_files') && 'opacity-50')}
+            className={cn('gap-2', !canAccessMoveFiles && 'opacity-50')}
           >
             <MoveRight className="w-4 h-4" /> Move account
-            {!canAccess('move_files') && <ProBadge className="ml-auto" />}
+            {!canAccessMoveFiles && <ProBadge className="ml-auto" />}
           </DropdownMenuItem>
           {!file.isFolder && (
             <DropdownMenuItem onClick={openDownload} className="gap-2">

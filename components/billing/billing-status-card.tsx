@@ -1,6 +1,8 @@
 'use client';
 
 import { useSubscriptionStore } from '@/stores/subscription.store';
+import { useAuthStore } from '@/stores/auth.store';
+import { usePricing } from '@/hooks/use-pricing';
 import { paymentsApi } from '@/lib/api/payments.api';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
@@ -8,6 +10,20 @@ import { ExternalLink } from 'lucide-react';
 
 export function BillingStatusCard() {
   const { plan, status, currentPeriodEnd } = useSubscriptionStore();
+  const user = useAuthStore((state) => state.user);
+  const { data: pricing, isLoading: isPricingLoading } = usePricing();
+
+  const isNg = (user as any)?.country === 'NG';
+  const currency = isNg ? 'NGN' : 'USD';
+  const activePlan = pricing?.plans?.find(p => p.currency === currency) || { amount: isNg ? 1500 : 2, currency };
+
+  const formatter = new Intl.NumberFormat(isNg ? 'en-NG' : 'en-US', {
+    style: 'currency',
+    currency: currency,
+    minimumFractionDigits: isNg ? 0 : 2,
+  });
+
+  const formattedPrice = formatter.format(activePlan.amount);
 
   const handleManageBilling = async () => {
     try {
@@ -49,7 +65,13 @@ export function BillingStatusCard() {
         {plan === 'PRO' && (
           <div className="flex items-center justify-between">
             <span className="text-text-secondary">Amount</span>
-            <span className="font-medium text-text-primary">₦800/month</span>
+            <span className="font-medium text-text-primary">
+              {isPricingLoading ? (
+                <div className="h-5 w-20 bg-border animate-pulse rounded inline-block"></div>
+              ) : (
+                `${formattedPrice}/month`
+              )}
+            </span>
           </div>
         )}
       </div>

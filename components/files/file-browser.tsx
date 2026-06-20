@@ -37,7 +37,7 @@ export function FileBrowser() {
   const bulkMove = useBulkMoveFiles();
   const [sortBy, sortOrder] = sortValue.split(':') as ['name' | 'size' | 'modifiedAt', 'asc' | 'desc'];
 
-  const canAccess = useSubscriptionStore((state) => state.canAccess);
+  const canAccessBulkOperations = useSubscriptionStore((state) => state.canAccess('bulk_operations'));
   const { openUpgradeModal } = useUpgradeModal();
 
   const { data: accounts } = useAccounts();
@@ -199,7 +199,7 @@ export function FileBrowser() {
             <p className="text-[13px] font-semibold">{selectedFiles.length} selected</p>
             <p className="truncate text-[11px] text-zinc-400">Bulk operations use trash and can be undone.</p>
           </div>
-          {!canAccess('bulk_operations') ? (
+          {!canAccessBulkOperations ? (
             <Button onClick={() => openUpgradeModal('bulk_operations')} className="bg-white text-black hover:bg-zinc-200">
               Unlock Bulk Operations <ProBadge className="ml-2" />
             </Button>

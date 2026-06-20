@@ -16,7 +16,7 @@ import { NotificationBell } from '@/components/notifications/notification-bell';
 export function Sidebar() {
   const pathname = usePathname();
   const user = useAuthStore((state) => state.user);
-  const isPro = useSubscriptionStore((state) => state.isPro);
+  const isPro = useSubscriptionStore((state) => state.isPro());
   const { data: accounts } = useAccounts();
   const { data: duplicateCount } = useDuplicateCount();
   const { setIsOpen } = useUploadStore();
@@ -158,7 +158,7 @@ export function Sidebar() {
             <div className="flex items-center gap-1.5">
               <p className="text-[11px] text-sidebar-text-muted truncate">{user?.email}</p>
             </div>
-            {isPro() ? (
+            {isPro ? (
               <span className="text-[11px] text-sidebar-text-muted flex items-center gap-1 mt-0.5">
                 Pro <Check className="h-3 w-3 text-green-400" />
               </span>

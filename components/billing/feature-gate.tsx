@@ -11,9 +11,9 @@ interface FeatureGateProps {
 }
 
 export function FeatureGate({ feature, children, fallback }: FeatureGateProps) {
-  const canAccess = useSubscriptionStore((state) => state.canAccess);
+  const canAccess = useSubscriptionStore((state) => state.canAccess(feature));
 
-  if (canAccess(feature)) return <>{children}</>;
+  if (canAccess) return <>{children}</>;
 
   if (fallback) return <>{fallback}</>;
 

@@ -40,10 +40,11 @@ async function proxy(request: NextRequest, context: { params: Promise<{ path: st
   const backendResponse = await fetch(target, {
     method: request.method,
     headers,
-    body: request.method === 'GET' || request.method === 'HEAD' ? undefined : await request.text(),
+    body: request.method === 'GET' || request.method === 'HEAD' ? undefined : request.body,
     redirect: 'manual',
     cache: 'no-store',
-  });
+    duplex: 'half',
+  } as any);
 
   const responseHeaders = new Headers();
   for (const header of ['content-type', 'content-length', 'content-disposition', 'cache-control', 'accept-ranges']) {
@@ -52,7 +53,7 @@ async function proxy(request: NextRequest, context: { params: Promise<{ path: st
   }
   responseHeaders.set('x-drivestack-proxy-target', `${target.pathname}${target.search}`);
 
-  const response = new NextResponse(await backendResponse.arrayBuffer(), {
+  const response = new NextResponse(backendResponse.body, {
     status: backendResponse.status,
     headers: responseHeaders,
   });

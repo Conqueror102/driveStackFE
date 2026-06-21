@@ -14,6 +14,7 @@ const ALLOWED_PREFIXES = [
   'activity',
   'saved-searches',
   'admin',
+  'payments',
 ];
 
 function isAllowed(path: string) {

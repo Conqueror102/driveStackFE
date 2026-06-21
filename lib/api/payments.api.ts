@@ -46,7 +46,7 @@ export const paymentsApi = {
     }),
 
   getPricing: () =>
-    apiFetch<PricingResponse>('/api/backend/payments/pricing', {
+    apiFetch<PricingResponse>('/api/payments/pricing', {
       method: 'GET',
     }),
 };

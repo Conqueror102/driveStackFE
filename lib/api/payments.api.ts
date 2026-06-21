@@ -25,28 +25,28 @@ export interface SubscriptionStatusResponse {
 
 export const paymentsApi = {
   createCheckout: (dto: CheckoutDto) =>
-    apiFetch<{ checkoutUrl: string }>('/api/payments/checkout', {
+    apiFetch<{ checkoutUrl: string }>('/api/backend/payments/checkout', {
       method: 'POST',
       body: dto,
     }),
 
   cancel: () =>
-    apiFetch('/api/payments/cancel', {
+    apiFetch('/api/backend/payments/cancel', {
       method: 'POST',
     }),
 
   getPortalUrl: () =>
-    apiFetch<{ url: string }>('/api/payments/portal', {
+    apiFetch<{ url: string }>('/api/backend/payments/portal', {
       method: 'GET',
     }),
 
   getStatus: () =>
-    apiFetch<SubscriptionStatusResponse>('/api/payments/status', {
+    apiFetch<SubscriptionStatusResponse>('/api/backend/payments/status', {
       method: 'GET',
     }),
 
   getPricing: () =>
-    apiFetch<PricingResponse>('/api/payments/pricing', {
+    apiFetch<PricingResponse>('/api/backend/payments/pricing', {
       method: 'GET',
     }),
 };

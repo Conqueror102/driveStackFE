@@ -33,8 +33,7 @@ export function PricingSection() {
   const handleUpgrade = async () => {
     setCheckoutLoading(true);
     try {
-      const currency = (user as any)?.country === 'NG' ? 'NGN' : 'USD';
-      const data = await paymentsApi.createCheckout({ currency });
+      const data = await paymentsApi.createCheckout({ isAnnual });
       window.location.href = data.checkoutUrl;
     } catch {
       toast.error("Something went wrong. Try again.");

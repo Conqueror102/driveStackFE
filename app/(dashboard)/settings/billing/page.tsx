@@ -17,7 +17,7 @@ export default function BillingPage() {
 
   const handleResubscribe = async () => {
     try {
-      const data = await paymentsApi.createCheckout({ currency: 'NGN' });
+      const data = await paymentsApi.createCheckout({});
       window.location.href = data.checkoutUrl;
     } catch {
       // toast handled by checkout

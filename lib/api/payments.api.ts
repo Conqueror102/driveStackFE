@@ -1,7 +1,7 @@
 import { apiFetch } from './client';
 
 export interface CheckoutDto {
-  currency: string;
+  isAnnual?: boolean;
 }
 
 export interface PricingPlan {

@@ -56,15 +56,15 @@ export default function BillingPage() {
 
         {/* CANCELLED Banner */}
         {status === 'CANCELLED' && (
-          <div className="border border-[#2563EB] bg-[#EFF6FF] rounded-xl p-5">
+          <div className="border border-border bg-surface rounded-xl p-5">
             <div className="flex items-start gap-3">
-              <Info className="h-5 w-5 text-[#2563EB] shrink-0 mt-0.5" />
+              <Info className="h-5 w-5 text-text-primary shrink-0 mt-0.5" />
               <div className="flex-1">
-                <p className="text-[14px] font-medium text-blue-900">Your subscription is cancelled</p>
-                <p className="text-[13px] text-blue-800 mt-1">
+                <p className="text-[14px] font-medium text-text-primary">Your subscription is cancelled</p>
+                <p className="text-[13px] text-text-secondary mt-1">
                   Pro features remain active until {currentPeriodEnd ? format(new Date(currentPeriodEnd), 'MMMM d, yyyy') : 'the end of your billing period'}.
                 </p>
-                <Button size="sm" className="mt-3 bg-blue-600 text-white hover:bg-blue-700" onClick={handleResubscribe}>
+                <Button size="sm" className="mt-3 bg-text-primary text-white hover:bg-text-primary/90" onClick={handleResubscribe}>
                   Resubscribe
                 </Button>
               </div>

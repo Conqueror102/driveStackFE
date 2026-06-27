@@ -20,9 +20,9 @@ export function AccountsList() {
 
   if (!accounts || accounts.length === 0) {
     return (
-      <div className="h-[400px] border-2 border-dashed border-border rounded-2xl flex flex-col items-center justify-center text-center animate-scale-in bg-white/50">
-        <div className="w-20 h-20 bg-gradient-to-br from-blue-500/10 to-violet-600/10 rounded-full flex items-center justify-center mb-6 shadow-sm">
-          <Cloud className="w-10 h-10 text-accent stroke-[1.5px]" />
+      <div className="flex flex-col items-center justify-center p-8 text-center bg-white border border-border rounded-xl">
+        <div className="w-20 h-20 bg-gradient-to-br from-ds-pure-black/5 to-ds-pure-black/10 rounded-full flex items-center justify-center mb-6 shadow-sm">
+          <Cloud className="h-8 w-8 text-text-tertiary" />
         </div>
         <h3 className="text-lg font-semibold mb-2 text-text-primary tracking-tight">Connect your first Google account</h3>
         <p className="text-[14px] text-text-secondary mb-8 max-w-sm">Each account adds 15 GB of free storage. You can connect as many drives as you need to build your unified stack.</p>
@@ -55,9 +55,9 @@ function AccountCard({ account }: { account: any }) {
   
   const isAlmostFull = pct >= 90;
   const statusConfigMap = {
-    ACTIVE: { label: 'Active', className: 'bg-emerald-50 text-emerald-700', icon: CheckCircle2 },
-    REAUTH_REQUIRED: { label: 'Reconnect required', className: 'bg-amber-50 text-amber-700', icon: AlertTriangle },
-    SYNC_FAILED: { label: 'Sync failed', className: 'bg-red-50 text-red-700', icon: AlertTriangle },
+    ACTIVE: { label: 'Active', className: 'bg-zinc-100 text-zinc-700', icon: CheckCircle2 },
+    REAUTH_REQUIRED: { label: 'Reconnect required', className: 'bg-zinc-100 text-zinc-700', icon: AlertTriangle },
+    SYNC_FAILED: { label: 'Sync failed', className: 'bg-zinc-100 text-zinc-700', icon: AlertTriangle },
     DISCONNECTED: { label: 'Disconnected', className: 'bg-zinc-100 text-zinc-600', icon: AlertTriangle },
   };
   const statusConfig = statusConfigMap[(account.status || 'ACTIVE') as keyof typeof statusConfigMap];
@@ -70,7 +70,7 @@ function AccountCard({ account }: { account: any }) {
         {/* Subtle gradient orb in the background */}
         <div 
           className="absolute -top-24 -right-24 w-56 h-56 rounded-full opacity-[0.04] group-hover:opacity-[0.08] blur-3xl transition-opacity duration-500 pointer-events-none"
-          style={{ backgroundColor: account.colorInfo.dot }}
+          style={{ backgroundColor: 'black' }}
         />
 
         {account.isDefault && (
@@ -83,7 +83,7 @@ function AccountCard({ account }: { account: any }) {
           <div className="flex justify-between items-start mb-6">
             <div 
               className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg font-bold shadow-sm border border-border/50"
-              style={{ backgroundColor: account.colorInfo.bg, color: account.colorInfo.text }}
+              style={{ backgroundColor: '#F4F4F5', color: '#18181B' }}
             >
               {account.googleEmail.charAt(0).toUpperCase()}
             </div>
@@ -135,11 +135,11 @@ function AccountCard({ account }: { account: any }) {
 
           {showAlerts && (
             <div className="mb-5 rounded-xl border border-border bg-[#101114] p-4 text-white shadow-xl">
-              <div className="mb-3 flex items-center gap-2">
-                <Bell className="h-4 w-4 text-blue-300" />
-                <span className="text-[13px] font-semibold">Storage alerts</span>
+              <div className="w-8 h-8 rounded bg-white/20 flex items-center justify-center mb-3">
+                <Bell className="h-4 w-4 text-white/80" />
               </div>
-              <div className="space-y-2">
+              <span className="text-[13px] font-semibold">Storage alerts</span>
+              <div className="space-y-2 mt-3">
                 {([80, 90] as const).map((threshold) => {
                   const alert = alerts.find((item) => item.accountId === account.id && item.threshold === threshold);
                   return (
@@ -149,7 +149,7 @@ function AccountCard({ account }: { account: any }) {
                         type="checkbox"
                         checked={Boolean(alert)}
                         onChange={(event) => toggleAlert.mutate({ accountId: account.id, threshold, alertId: alert?.id, enabled: event.target.checked })}
-                        className="h-4 w-4 accent-blue-500"
+                        className="h-4 w-4 accent-white"
                       />
                     </label>
                   );

@@ -49,7 +49,7 @@ export function MobileNav() {
                 <div className="flex flex-col items-center justify-center flex-1 py-1">
                   <button
                     onClick={() => setIsOpen(true)}
-                    className="w-11 h-11 -mt-5 bg-gradient-to-br from-blue-500 to-violet-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/25 active:scale-95 transition-transform"
+                    className="w-11 h-11 -mt-5 bg-ds-pure-black rounded-2xl flex items-center justify-center shadow-lg shadow-black/25 active:scale-95 transition-transform"
                     aria-label="Upload files"
                   >
                     <Upload className="h-5 w-5 text-white" />

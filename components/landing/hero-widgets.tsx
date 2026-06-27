@@ -91,17 +91,17 @@ export function DuplicateScannerWidget({ isInView }: { isInView: boolean }) {
           <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]" />
           <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]" />
         </div>
-        <div className="text-[10px] uppercase tracking-widest font-mono text-amber-500/80 flex items-center gap-1.5">
+        <div className="text-[10px] uppercase tracking-widest font-mono text-white/80 flex items-center gap-1.5">
           <Search className="w-3 h-3" /> Duplicate_Scanner
         </div>
       </div>
 
       <div className="flex-1 p-8 flex flex-col gap-6 relative">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-amber-500/[0.02] blur-[80px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-white/[0.02] blur-[80px] rounded-full pointer-events-none" />
 
         <div className="flex flex-col gap-2 relative z-10 text-center items-center mt-2">
-          <div className="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center mb-2">
-            <Copy className="w-5 h-5 text-amber-500" />
+          <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-2">
+            <Copy className="w-5 h-5 text-white" />
           </div>
           <span className="text-[28px] font-bold text-white tracking-tight leading-none">45.2 GB</span>
           <span className="text-[12px] text-white/40 font-mono uppercase tracking-wider">Duplicate Space Recoverable</span>
@@ -142,7 +142,7 @@ export function DuplicateScannerWidget({ isInView }: { isInView: boolean }) {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={isInView ? { opacity: 1, scale: 1 } : {}}
           transition={{ delay: 0.8 }}
-          className="mt-auto w-full py-3.5 bg-amber-500 text-amber-950 font-medium rounded-xl text-[14px] hover:bg-amber-400 transition-colors flex items-center justify-center gap-2"
+          className="mt-auto w-full py-3.5 bg-white text-black font-medium rounded-xl text-[14px] hover:bg-white/90 transition-colors flex items-center justify-center gap-2"
         >
           <Zap className="w-4 h-4" /> Resolve Duplicates
         </motion.button>
@@ -160,22 +160,22 @@ export function BulkCommanderWidget({ isInView }: { isInView: boolean }) {
           <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]" />
           <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]" />
         </div>
-        <div className="text-[10px] uppercase tracking-widest font-mono text-blue-500/80 flex items-center gap-1.5">
+        <div className="text-[10px] uppercase tracking-widest font-mono text-white/80 flex items-center gap-1.5">
           <CheckCircle2 className="w-3 h-3" /> Bulk_Commander
         </div>
       </div>
 
       <div className="flex-1 p-8 flex flex-col gap-6 relative">
-        <div className="absolute top-0 right-0 w-[250px] h-[250px] bg-blue-500/[0.02] blur-[70px] rounded-full pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[250px] h-[250px] bg-white/[0.02] blur-[70px] rounded-full pointer-events-none" />
 
-        <div className="flex justify-between items-center relative z-10 bg-blue-500/10 border border-blue-500/20 px-4 py-3 rounded-lg">
+        <div className="flex justify-between items-center relative z-10 bg-white/10 border border-white/20 px-4 py-3 rounded-lg">
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded bg-blue-500 flex items-center justify-center">
-              <CheckCircle2 className="w-3 h-3 text-white" />
+            <div className="w-4 h-4 rounded bg-white flex items-center justify-center">
+              <CheckCircle2 className="w-3 h-3 text-black" />
             </div>
-            <span className="text-[13px] text-blue-100 font-medium">42 files selected</span>
+            <span className="text-[13px] text-white/90 font-medium">42 files selected</span>
           </div>
-          <span className="text-[12px] font-mono text-blue-200/50">across 3 drives</span>
+          <span className="text-[12px] font-mono text-white/50">across 3 drives</span>
         </div>
 
         <div className="flex flex-col gap-2 relative z-10">
@@ -192,8 +192,8 @@ export function BulkCommanderWidget({ isInView }: { isInView: boolean }) {
               transition={{ duration: 0.3, delay: 0.2 + (i * 0.05) }}
               className="flex items-center gap-3 p-2.5 rounded-lg border border-transparent hover:bg-white/[0.02]"
             >
-              <div className="w-3.5 h-3.5 rounded border border-blue-500 bg-blue-500/20 flex items-center justify-center">
-                <CheckCircle2 className="w-2.5 h-2.5 text-blue-400" />
+              <div className="w-3.5 h-3.5 rounded border border-white/50 bg-white/20 flex items-center justify-center">
+                <CheckCircle2 className="w-2.5 h-2.5 text-white" />
               </div>
               <span className="text-[13px] text-white/80">{file.name}</span>
               <span className="ml-auto text-[10px] text-white/30 uppercase font-mono">{file.drive}</span>
@@ -233,13 +233,13 @@ export function FileBrowserWidget({ isInView }: { isInView: boolean }) {
           <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]" />
           <div className="w-2.5 h-2.5 rounded-full bg-white/[0.1]" />
         </div>
-        <div className="text-[10px] uppercase tracking-widest font-mono text-purple-500/80 flex items-center gap-1.5">
+        <div className="text-[10px] uppercase tracking-widest font-mono text-white/80 flex items-center gap-1.5">
           <Folder className="w-3 h-3" /> File_Explorer
         </div>
       </div>
 
       <div className="flex-1 p-6 flex flex-col gap-4 relative">
-        <div className="absolute top-1/2 left-0 w-[200px] h-[200px] bg-purple-500/[0.02] blur-[70px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/2 left-0 w-[200px] h-[200px] bg-white/[0.02] blur-[70px] rounded-full pointer-events-none" />
 
         {/* Breadcrumbs */}
         <div className="flex items-center gap-2 text-[12px] font-mono text-white/40 bg-white/[0.02] px-3 py-2 rounded-lg border border-white/[0.03]">
@@ -247,7 +247,7 @@ export function FileBrowserWidget({ isInView }: { isInView: boolean }) {
           <ChevronRight className="w-3 h-3" />
           <span>Work_Drive</span>
           <ChevronRight className="w-3 h-3" />
-          <span className="text-purple-400">Marketing_Assets</span>
+          <span className="text-white/90">Marketing_Assets</span>
         </div>
 
         {/* File Grid */}
@@ -268,16 +268,16 @@ export function FileBrowserWidget({ isInView }: { isInView: boolean }) {
               className="flex flex-col gap-2 p-3 rounded-xl border border-white/[0.03] bg-white/[0.01] hover:bg-white/[0.03] transition-colors cursor-pointer group"
             >
               <div className="flex items-start justify-between">
-                <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center", item.type === 'folder' ? 'bg-purple-500/10' : 'bg-white/5')}>
+                <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center", item.type === 'folder' ? 'bg-white/10' : 'bg-white/5')}>
                   {item.type === 'folder' ? (
-                    <Folder className="w-4 h-4 text-purple-400" />
+                    <Folder className="w-4 h-4 text-white" />
                   ) : (
                     <FileIcon className="w-4 h-4 text-white/60" />
                   )}
                 </div>
               </div>
               <div className="flex flex-col mt-1">
-                <span className="text-[13px] text-white/90 font-medium truncate group-hover:text-purple-300 transition-colors">{item.name}</span>
+                <span className="text-[13px] text-white/90 font-medium truncate group-hover:text-white transition-colors">{item.name}</span>
                 <span className="text-[11px] text-white/40 font-mono mt-0.5">{item.size}</span>
               </div>
             </motion.div>

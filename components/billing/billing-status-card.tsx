@@ -52,7 +52,7 @@ export function BillingStatusCard() {
         </div>
         <div className="flex items-center justify-between">
           <span className="text-text-secondary">Status</span>
-          <span className={`font-medium ${status === 'ACTIVE' ? 'text-green-600' : status === 'ON_HOLD' ? 'text-amber-600' : status === 'CANCELLED' ? 'text-blue-600' : 'text-text-tertiary'}`}>
+          <span className={`font-medium ${status === 'ACTIVE' ? 'text-green-600' : status === 'ON_HOLD' ? 'text-amber-600' : status === 'CANCELLED' ? 'text-text-primary' : 'text-text-tertiary'}`}>
             {status === 'ACTIVE' ? 'Active' : status === 'ON_HOLD' ? 'Payment failed' : status === 'CANCELLED' ? 'Cancelled' : 'Expired'}
           </span>
         </div>

@@ -54,8 +54,7 @@ export function UpgradeModal() {
   const handleUpgrade = async () => {
     setLoading(true);
     try {
-      const currency = (user as any)?.country === 'NG' ? 'NGN' : 'USD';
-      const data = await paymentsApi.createCheckout({ currency });
+      const data = await paymentsApi.createCheckout({});
       window.location.href = data.checkoutUrl;
     } catch {
       toast.error("Couldn't start checkout. Please try again.");

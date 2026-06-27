@@ -73,7 +73,7 @@
     --card-foreground: #0F0F0F;
     --popover: #FFFFFF;
     --popover-foreground: #0F0F0F;
-    --primary: #2563EB;
+    --primary: var(--ds-pure-black);
     --primary-foreground: #FFFFFF;
     --secondary: #F4F4F5;
     --secondary-foreground: #0F0F0F;
@@ -85,7 +85,7 @@
     --destructive-foreground: #FFFFFF;
     --border-shadcn: #E8E8E5;
     --input: #E8E8E5;
-    --ring: #2563EB;
+    --ring: var(--ds-pure-black);
     --radius: 0.625rem;
 
     /* Custom DriveStack Tokens (Black & White Editorial) */
@@ -129,8 +129,8 @@
   * {
     @apply border-border-shadcn outline-ring;
   }
-  body {
-    @apply bg-background text-text-primary antialiased;
+  html, body {
+    @apply bg-background text-text-primary antialiased overflow-x-hidden;
   }
   .font-serif {
     font-family: var(--font-serif), ui-serif, Georgia, serif;

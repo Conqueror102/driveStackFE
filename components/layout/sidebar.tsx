@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Bell, Check, Copy, Files, HardDrive, LayoutDashboard, LogOut, Plus, Settings, Trash2, Upload, Users } from 'lucide-react';
+import { Bell, Check, Copy, Files, HardDrive, LayoutDashboard, LogOut, Plus, Settings, Trash2, Upload, Users, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/stores/auth.store';
 import { useSubscriptionStore } from '@/stores/subscription.store';
@@ -13,7 +13,7 @@ import { useLogout } from '@/hooks/use-auth';
 import { useDuplicateCount } from '@/hooks/use-files';
 import { NotificationBell } from '@/components/notifications/notification-bell';
 
-export function Sidebar() {
+export function Sidebar({ mobileMenuOpen, onClose }: { mobileMenuOpen?: boolean; onClose?: () => void }) {
   const pathname = usePathname();
   const user = useAuthStore((state) => state.user);
   const isPro = useSubscriptionStore((state) => state.isPro());
@@ -34,15 +34,30 @@ export function Sidebar() {
   ];
 
   return (
-    <div className="hidden lg:flex w-[260px] flex-col bg-sidebar-bg text-sidebar-text h-screen sticky top-0 select-none">
-      <div className="px-5 pt-6 pb-4">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
-            <span className="text-white font-bold text-sm">DS</span>
+    <>
+      {/* Mobile Overlay */}
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0 z-40 bg-black/80 lg:hidden backdrop-blur-sm"
+          onClick={onClose}
+        />
+      )}
+      <div className={cn(
+        "w-[260px] flex-col bg-sidebar-bg text-sidebar-text h-screen select-none z-50",
+        mobileMenuOpen ? "flex fixed inset-y-0 left-0 shadow-2xl" : "hidden lg:flex lg:sticky lg:top-0"
+      )}>
+        <div className="px-5 pt-6 pb-4 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-ds-pure-black to-ds-mid-dark border border-white/10 flex items-center justify-center shadow-lg shadow-black/20">
+              <span className="text-white font-bold text-sm">DS</span>
+            </div>
+            <span className="text-[15px] font-semibold tracking-tight text-white">DriveStack</span>
           </div>
-          <span className="text-[15px] font-semibold tracking-tight text-white">DriveStack</span>
+          {/* Mobile close button */}
+          <button onClick={onClose} className="lg:hidden p-1.5 text-sidebar-text-muted hover:text-white rounded-lg">
+            <X className="h-5 w-5" />
+          </button>
         </div>
-      </div>
 
       <nav className="flex-1 px-3 space-y-0.5 overflow-y-auto custom-scrollbar">
         {navigation.map((item) => {
@@ -60,10 +75,10 @@ export function Sidebar() {
                   : 'text-sidebar-text-muted hover:bg-sidebar-hover hover:text-sidebar-text'
               )}
             >
-              <item.icon className={cn('h-4 w-4 shrink-0', isActive ? 'text-blue-400' : 'text-sidebar-text-muted group-hover:text-sidebar-text')} />
+              <item.icon className={cn('h-4 w-4 shrink-0', isActive ? 'text-white' : 'text-sidebar-text-muted group-hover:text-sidebar-text')} />
               <span className="flex-1">{item.name}</span>
               {Boolean(item.badge) && (
-                <span className="rounded-full bg-blue-500/20 px-1.5 py-0.5 text-[10px] font-semibold text-blue-300">
+                <span className="rounded-full bg-white/20 px-1.5 py-0.5 text-[10px] font-semibold text-white">
                   {item.badge}
                 </span>
               )}
@@ -150,7 +165,7 @@ export function Sidebar() {
           </Link>
         </div>
         <div className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-sidebar-hover transition-colors group">
-          <div className="h-8 w-8 bg-gradient-to-br from-blue-500/20 to-violet-500/20 rounded-full flex items-center justify-center text-blue-400 font-medium text-[13px] shrink-0 ring-1 ring-white/10">
+          <div className="h-8 w-8 bg-white/10 rounded-full flex items-center justify-center text-white font-medium text-[13px] shrink-0 ring-1 ring-white/10">
             {user?.displayName ? user.displayName.charAt(0).toUpperCase() : user?.email?.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
@@ -160,10 +175,10 @@ export function Sidebar() {
             </div>
             {isPro ? (
               <span className="text-[11px] text-sidebar-text-muted flex items-center gap-1 mt-0.5">
-                Pro <Check className="h-3 w-3 text-green-400" />
+                Pro <Check className="h-3 w-3 text-white" />
               </span>
             ) : (
-              <Link href="/pricing" className="text-[11px] text-blue-400 hover:text-blue-300 transition-colors mt-0.5 inline-block">
+              <Link href="/pricing" className="text-[11px] text-sidebar-text-muted hover:text-white transition-colors mt-0.5 inline-block">
                 Upgrade →
               </Link>
             )}
@@ -177,6 +192,7 @@ export function Sidebar() {
           </button>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

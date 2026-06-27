@@ -3,10 +3,12 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/stores/auth.store";
 
 export function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const user = useAuthStore((state) => state.user);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,10 +42,18 @@ export function Navigation() {
 
         {/* CTA */}
         <div className="hidden md:flex items-center gap-4">
-          <a href="/login" className="text-[14px] font-medium text-white/80 hover:text-white transition-colors">Sign in</a>
-          <a href="/signup" className="text-[14px] font-medium bg-white text-black px-4 py-2 rounded-full hover:bg-white/90 transition-colors flex items-center gap-2">
-            Get started <span className="text-[12px]">→</span>
-          </a>
+          {user ? (
+            <a href="/overview" className="text-[14px] font-medium bg-white text-black px-4 py-2 rounded-full hover:bg-white/90 transition-colors flex items-center gap-2">
+              Go to Dashboard <span className="text-[12px]">→</span>
+            </a>
+          ) : (
+            <>
+              <a href="/login" className="text-[14px] font-medium text-white/80 hover:text-white transition-colors">Sign in</a>
+              <a href="/signup" className="text-[14px] font-medium bg-white text-black px-4 py-2 rounded-full hover:bg-white/90 transition-colors flex items-center gap-2">
+                Get started <span className="text-[12px]">→</span>
+              </a>
+            </>
+          )}
         </div>
 
         {/* Mobile Toggle */}
@@ -62,8 +72,14 @@ export function Navigation() {
           <a href="/pricing" className="text-[16px] text-white/80">Pricing</a>
           <a href="#faq" className="text-[16px] text-white/80">FAQ</a>
           <hr className="border-white/[0.08]" />
-          <a href="/login" className="text-[16px] text-white/80">Sign in</a>
-          <a href="/signup" className="text-[16px] font-medium bg-white text-black px-4 py-3 rounded-full text-center">Get started</a>
+          {user ? (
+            <a href="/overview" className="text-[16px] font-medium bg-white text-black px-4 py-3 rounded-full text-center">Go to Dashboard</a>
+          ) : (
+            <>
+              <a href="/login" className="text-[16px] text-white/80">Sign in</a>
+              <a href="/signup" className="text-[16px] font-medium bg-white text-black px-4 py-3 rounded-full text-center">Get started</a>
+            </>
+          )}
         </div>
       )}
     </header>

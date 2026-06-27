@@ -54,14 +54,14 @@ export default function OverviewPage() {
           value={accounts?.length.toString() || '0'}
           sublabel="connected"
           icon={<Cloud className="h-4 w-4" />}
-          color="blue"
+          color="neutral"
         />
         <StatCard
           label="Total Storage"
           value={formatBytes(totalLimit)}
           sublabel="combined"
           icon={<HardDrive className="h-4 w-4" />}
-          color="violet"
+          color="neutral"
         />
         <StatCard
           label="Used"
@@ -250,13 +250,14 @@ function StatCard({ label, value, sublabel, icon, color }: {
   value: string;
   sublabel: string;
   icon: React.ReactNode;
-  color: 'blue' | 'violet' | 'emerald' | 'amber';
+  color: 'blue' | 'violet' | 'emerald' | 'amber' | 'neutral';
 }) {
   const colorMap = {
     blue: 'from-blue-500/10 to-blue-500/5 text-blue-600',
     violet: 'from-violet-500/10 to-violet-500/5 text-violet-600',
     emerald: 'from-emerald-500/10 to-emerald-500/5 text-emerald-600',
     amber: 'from-amber-500/10 to-amber-500/5 text-amber-600',
+    neutral: 'from-black/10 to-black/5 text-black',
   };
 
   return (

@@ -42,7 +42,7 @@ export const Header: FC<{ onMobileMenuToggle?: () => void; mobileMenuOpen?: bool
 
         {/* Mobile logo */}
         <div className="lg:hidden flex items-center gap-2">
-          <div className="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center">
+          <div className="w-6 h-6 rounded-md bg-gradient-to-br from-ds-pure-black to-ds-mid-dark flex items-center justify-center">
             <span className="text-white font-bold text-[10px]">DS</span>
           </div>
           <span className="text-sm font-semibold text-text-primary">DriveStack</span>
@@ -116,7 +116,7 @@ export const Header: FC<{ onMobileMenuToggle?: () => void; mobileMenuOpen?: bool
 
         {/* User avatar (desktop) */}
         <div className="hidden lg:flex items-center ml-1">
-          <div className="h-7 w-7 bg-gradient-to-br from-blue-500/10 to-violet-500/10 rounded-full flex items-center justify-center text-accent font-medium text-[12px] ring-1 ring-border">
+          <div className="h-7 w-7 bg-ds-pure-black rounded-full flex items-center justify-center text-white font-medium text-[12px] ring-1 ring-border">
             {user?.displayName ? user.displayName.charAt(0).toUpperCase() : user?.email?.charAt(0).toUpperCase()}
           </div>
         </div>

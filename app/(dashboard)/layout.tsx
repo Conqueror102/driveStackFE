@@ -34,7 +34,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-3 animate-fade-in-up">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
+          <div className="w-10 h-10 rounded-xl bg-ds-pure-black flex items-center justify-center shadow-lg shadow-black/20">
             <span className="text-white font-bold text-sm">DS</span>
           </div>
           <div className="flex items-center gap-2">

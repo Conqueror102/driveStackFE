@@ -23,13 +23,14 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
     <div className="min-h-screen bg-background flex">
       {/* Left Panel — Brand & Value Prop */}
       <div className="hidden lg:flex flex-col flex-1 relative overflow-hidden bg-[#0F0F12] text-white">
-        {/* Animated gradient mesh background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-violet-600/20 to-transparent animate-gradient-shift" />
+        {/* Abstract shapes for visual interest */}
+        <div className="absolute inset-0 bg-gradient-to-br from-ds-pure-black/5 via-ds-pure-black/5 to-transparent animate-gradient-shift" />
+        <div className="absolute top-1/4 -left-24 w-96 h-96 bg-ds-pure-black/5 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="relative z-10 flex flex-col h-full p-12">
           {/* Logo */}
-          <div className="flex items-center gap-3 mb-16">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center shadow-lg shadow-blue-500/25">
+          <div className="mb-10 animate-fade-in-up">
+            <div className="w-10 h-10 rounded-xl bg-ds-pure-black flex items-center justify-center shadow-lg shadow-black/25">
               <span className="text-white font-bold text-[15px]">DS</span>
             </div>
             <span className="text-xl font-semibold tracking-tight">DriveStack</span>
@@ -47,8 +48,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
                 "Smart upload routing to free space",
               ].map((feature, i) => (
                 <div key={i} className="flex items-center gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-blue-400" />
-                  <span className="text-[15px]">{feature}</span>
+                  <CheckCircle2 className="w-5 h-5 text-text-secondary" />
+                  <span className="text-[15px] font-medium text-white/90">{feature}</span>
                 </div>
               ))}
             </div>
@@ -70,10 +71,10 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
       {/* Right Panel — Form */}
       <div className="flex-1 flex flex-col items-center justify-center p-6 lg:p-12 relative animate-fade-in-up">
-        {/* Mobile Logo */}
-        <div className="lg:hidden flex items-center gap-3 mb-10">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center shadow-md">
-            <span className="text-white font-bold text-[12px]">DS</span>
+        {/* Mobile Header (only visible on small screens) */}
+        <div className="lg:hidden absolute top-0 left-0 right-0 p-6 flex justify-center z-10">
+          <div className="w-8 h-8 rounded-lg bg-ds-pure-black flex items-center justify-center shadow-md">
+            <span className="text-white font-bold text-[11px]">DS</span>
           </div>
           <span className="text-lg font-semibold tracking-tight text-text-primary">DriveStack</span>
         </div>

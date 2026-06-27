@@ -56,7 +56,7 @@ export function HeroSection() {
 
             <div className={cn("reveal flex flex-col sm:flex-row items-start sm:items-center gap-6", isInView && "is-visible")} style={{ transitionDelay: "300ms" }}>
               <div className="flex items-center gap-4">
-                <a href="/signup" className="bg-white text-black font-medium px-6 py-3.5 rounded-[12px] hover:bg-white/90 transition-colors flex items-center gap-2">
+                <a href="/register" className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-white px-8 text-[15px] font-medium text-black transition-colors hover:bg-white/90">
                   Start for free <span className="text-[14px]">→</span>
                 </a>
                 <a href="#demo" className="text-white/70 hover:text-white font-medium px-6 py-3.5 border border-white/10 rounded-[12px] transition-colors">

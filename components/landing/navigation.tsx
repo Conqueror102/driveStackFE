@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/auth.store";
 
@@ -29,8 +30,11 @@ export function Navigation() {
     >
       <div className="px-6 flex items-center justify-between">
         {/* Logo */}
-        <div className="flex items-center gap-2">
-          <span className="font-bold text-[18px] tracking-tight text-white">DriveStack</span>
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 relative rounded-full overflow-hidden bg-white/10 flex items-center justify-center">
+            <Image src="/assets/driveStackLogo.png" alt="DriveStack Logo" fill className="object-cover scale-[1.6]" />
+          </div>
+          <span className="font-black text-[22px] tracking-tighter text-white">DriveStack</span>
         </div>
 
         {/* Desktop Links */}
@@ -49,7 +53,7 @@ export function Navigation() {
           ) : (
             <>
               <a href="/login" className="text-[14px] font-medium text-white/80 hover:text-white transition-colors">Sign in</a>
-              <a href="/signup" className="text-[14px] font-medium bg-white text-black px-4 py-2 rounded-full hover:bg-white/90 transition-colors flex items-center gap-2">
+              <a href="/register" className="text-[14px] font-medium bg-white text-black px-4 py-2 rounded-full hover:bg-white/90 transition-colors flex items-center gap-2">
                 Get started <span className="text-[12px]">→</span>
               </a>
             </>
@@ -77,7 +81,7 @@ export function Navigation() {
           ) : (
             <>
               <a href="/login" className="text-[16px] text-white/80">Sign in</a>
-              <a href="/signup" className="text-[16px] font-medium bg-white text-black px-4 py-3 rounded-full text-center">Get started</a>
+              <a href="/register" className="text-[16px] font-medium bg-white text-black px-4 py-3 rounded-full text-center">Get started</a>
             </>
           )}
         </div>

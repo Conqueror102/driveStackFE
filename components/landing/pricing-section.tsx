@@ -138,7 +138,7 @@ export function PricingSection() {
 
             {/* Pro Card */}
             <div className="flex-1 bg-ds-true-white border-[2px] border-ds-pure-black rounded-[16px] p-8 md:p-10 flex flex-col relative order-1 md:order-2 shadow-sm">
-              <div className="absolute top-8 right-8 bg-ds-pure-black text-ds-true-white text-[10px] uppercase font-bold tracking-wider px-3 py-1 rounded-[4px]">
+              <div className="absolute top-8 right-8 bg-ds-pure-black text-ds-true-white text-[10px] uppercase font-bold tracking-wider px-3 py-1.5 rounded-[4px] leading-none flex items-center justify-center">
                 MOST POPULAR
               </div>
               
@@ -148,7 +148,7 @@ export function PricingSection() {
               <div className="w-full h-[1px] bg-ds-light-border mb-6" />
               
               <div className="mb-4">
-                <div className="flex flex-col h-[50px] justify-center overflow-hidden">
+                <div className="flex flex-col h-[50px] overflow-hidden">
                   {/* Subtle animation wrapper for price change */}
                   <div 
                     className="flex flex-col transition-transform duration-300 ease-in-out"
@@ -156,7 +156,7 @@ export function PricingSection() {
                   >
                     <div className="h-[50px] flex items-end">
                       {isPricingLoading ? (
-                        <div className="h-8 w-24 bg-ds-light-border animate-pulse rounded"></div>
+                        <span className="text-[32px] font-bold text-ds-mid-grey leading-none">...</span>
                       ) : (
                         <>
                           <span className="text-[32px] font-bold text-ds-dark-text leading-none">{monthlyPrice}</span>
@@ -166,7 +166,7 @@ export function PricingSection() {
                     </div>
                     <div className="h-[50px] flex items-end">
                       {isPricingLoading ? (
-                        <div className="h-8 w-24 bg-ds-light-border animate-pulse rounded"></div>
+                        <span className="text-[32px] font-bold text-ds-mid-grey leading-none">...</span>
                       ) : (
                         <>
                           <span className="text-[32px] font-bold text-ds-dark-text leading-none">{annualMonthlyPrice}</span>

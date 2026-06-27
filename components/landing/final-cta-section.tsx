@@ -42,7 +42,7 @@ export function FinalCtaSection() {
           </p>
 
           <Link
-            href="/signup"
+            href="/register"
             className="group bg-ds-true-white text-ds-pure-black text-[15px] font-semibold h-[56px] px-12 rounded-[10px] flex items-center justify-center border border-transparent hover:bg-ds-pure-black hover:text-ds-true-white hover:border-ds-true-white transition-all duration-200 ease-out mb-8"
           >
             Get started free 

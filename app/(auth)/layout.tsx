@@ -3,6 +3,7 @@
 import { useAuthStore } from '@/stores/auth.store';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import Image from 'next/image';
 import { CheckCircle2, Quote } from 'lucide-react';
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
@@ -29,11 +30,11 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
         <div className="relative z-10 flex flex-col h-full p-12">
           {/* Logo */}
-          <div className="mb-10 animate-fade-in-up">
-            <div className="w-10 h-10 rounded-xl bg-ds-pure-black flex items-center justify-center shadow-lg shadow-black/25">
-              <span className="text-white font-bold text-[15px]">DS</span>
+          <div className="flex items-center gap-3 mb-10 animate-fade-in-up">
+            <div className="w-12 h-12 relative rounded-full overflow-hidden bg-white/10 flex items-center justify-center">
+              <Image src="/assets/driveStackLogo.png" alt="DriveStack Logo" fill className="object-cover scale-[1.6]" />
             </div>
-            <span className="text-xl font-semibold tracking-tight">DriveStack</span>
+            <span className="text-[26px] font-black tracking-tighter">DriveStack</span>
           </div>
 
           <div className="mt-auto mb-20 space-y-10 animate-fade-in-up">
@@ -72,11 +73,11 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       {/* Right Panel — Form */}
       <div className="flex-1 flex flex-col items-center justify-center p-6 lg:p-12 relative animate-fade-in-up">
         {/* Mobile Header (only visible on small screens) */}
-        <div className="lg:hidden absolute top-0 left-0 right-0 p-6 flex justify-center z-10">
-          <div className="w-8 h-8 rounded-lg bg-ds-pure-black flex items-center justify-center shadow-md">
-            <span className="text-white font-bold text-[11px]">DS</span>
+        <div className="lg:hidden absolute top-0 left-0 right-0 p-6 flex justify-center items-center gap-2.5 z-10">
+          <div className="w-8 h-8 relative rounded-full overflow-hidden bg-white/10 flex items-center justify-center">
+            <Image src="/assets/driveStackLogo.png" alt="DriveStack Logo" fill className="object-cover scale-[1.6]" />
           </div>
-          <span className="text-lg font-semibold tracking-tight text-text-primary">DriveStack</span>
+          <span className="text-[18px] font-black tracking-tighter text-text-primary">DriveStack</span>
         </div>
 
         <div className="w-full max-w-[380px]">

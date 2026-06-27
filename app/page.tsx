@@ -15,7 +15,7 @@ import { Footer } from "@/components/landing/footer";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-ds-pure-black selection:bg-ds-true-white selection:text-ds-pure-black">
+    <main className="min-h-screen w-full overflow-x-hidden bg-ds-pure-black selection:bg-ds-true-white selection:text-ds-pure-black">
       <Navigation />
       <HeroSection />
       <MarqueeStrip />

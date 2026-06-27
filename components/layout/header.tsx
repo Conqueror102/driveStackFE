@@ -1,6 +1,7 @@
 'use client';
 
 import { FC, useState } from 'react';
+import Image from 'next/image';
 import { Search, Upload, Menu, X } from 'lucide-react';
 import { useUploadStore } from '@/stores/upload.store';
 import { useAuthStore } from '@/stores/auth.store';
@@ -41,11 +42,11 @@ export const Header: FC<{ onMobileMenuToggle?: () => void; mobileMenuOpen?: bool
         </button>
 
         {/* Mobile logo */}
-        <div className="lg:hidden flex items-center gap-2">
-          <div className="w-6 h-6 rounded-md bg-gradient-to-br from-ds-pure-black to-ds-mid-dark flex items-center justify-center">
-            <span className="text-white font-bold text-[10px]">DS</span>
+        <div className="lg:hidden flex items-center gap-2.5">
+          <div className="w-8 h-8 relative rounded-full overflow-hidden bg-white/10 flex items-center justify-center">
+            <Image src="/assets/driveStackLogo.png" alt="DriveStack Logo" fill className="object-cover scale-[1.6]" />
           </div>
-          <span className="text-sm font-semibold text-text-primary">DriveStack</span>
+          <span className="text-[18px] font-black tracking-tighter text-text-primary">DriveStack</span>
         </div>
 
         {/* Desktop: Page title */}

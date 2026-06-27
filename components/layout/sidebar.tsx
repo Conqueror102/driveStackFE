@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Bell, Check, Copy, Files, HardDrive, LayoutDashboard, LogOut, Plus, Settings, Trash2, Upload, Users, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -48,10 +49,10 @@ export function Sidebar({ mobileMenuOpen, onClose }: { mobileMenuOpen?: boolean;
       )}>
         <div className="px-5 pt-6 pb-4 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-ds-pure-black to-ds-mid-dark border border-white/10 flex items-center justify-center shadow-lg shadow-black/20">
-              <span className="text-white font-bold text-sm">DS</span>
+            <div className="w-8 h-8 relative rounded-full overflow-hidden bg-white/10 flex items-center justify-center">
+              <Image src="/assets/driveStackLogo.png" alt="DriveStack Logo" fill className="object-cover scale-[1.6]" />
             </div>
-            <span className="text-[15px] font-semibold tracking-tight text-white">DriveStack</span>
+            <span className="text-[18px] font-black tracking-tighter text-white">DriveStack</span>
           </div>
           {/* Mobile close button */}
           <button onClick={onClose} className="lg:hidden p-1.5 text-sidebar-text-muted hover:text-white rounded-lg">
